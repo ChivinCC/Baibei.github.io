@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - 百倍机会攻略</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            line-height: 1.6;
+            color: #1d1d1f;
+            background: #f5f5f7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header h1 {
+            font-size: 2em;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 10px;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 16px;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            color: #86868b;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .settings-panel {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 12px;
+            color: #1d1d1f;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1em;
+            transition: all 0.2s;
+            background: #fbfbfd;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .articles-panel {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .add-article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .article-item {
+            padding: 24px;
+            border: 1px solid #e8e8ed;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            transition: all 0.3s;
+        }
+
+        .article-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .article-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .article-item-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .article-item-meta {
+            color: #86868b;
+            font-size: 0.9em;
+        }
+
+        .article-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-edit {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .btn-edit:hover {
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        .btn-delete {
+            background: rgba(255, 59, 48, 0.1);
+            color: #ff3b30;
+        }
+
+        .btn-delete:hover {
+            background: rgba(255, 59, 48, 0.2);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 60px 20px;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 800px;
+            width: 100%;
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            margin: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 28px;
+            color: #86868b;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #f5f5f7;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #e8e8ed;
+            transform: scale(1.05);
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1em;
+            min-height: 300px;
+            resize: vertical;
+            line-height: 1.6;
+            background: #fbfbfd;
+            transition: all 0.2s;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .success-message {
+            background: rgba(52, 199, 89, 0.1);
+            color: #34c759;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .article-item-header {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 管理后台</h1>
+            <a href="index.html" class="back-btn">返回前台</a>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('settings')">网站设置</button>
+            <button class="tab" onclick="switchTab('articles')">文章管理</button>
+        </div>
+
+        <!-- 网站设置 -->
+        <div id="settingsTab" class="tab-content active">
+            <div class="settings-panel">
+                <div id="settingsSuccess" class="success-message">保存成功！</div>
+                <h2 style="margin-bottom: 30px; font-weight: 600;">网站信息</h2>
+                <form onsubmit="saveSettings(event)">
+                    <div class="form-group">
+                        <label>网站标题</label>
+                        <input type="text" id="siteTitle" required placeholder="例如：百倍机会攻略">
+                    </div>
+                    <div class="form-group">
+                        <label>副标题</label>
+                        <input type="text" id="siteSubtitle" required placeholder="例如：美股投资洞察">
+                    </div>
+                    <div class="form-group">
+                        <label>作者签名</label>
+                        <input type="text" id="siteAuthor" required placeholder="例如：每日深度研究 · 发现价值机会">
+                    </div>
+                    <button type="submit" class="btn-save">保存设置</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 文章管理 -->
+        <div id="articlesTab" class="tab-content">
+            <div class="articles-panel">
+                <div id="articlesSuccess" class="success-message">操作成功！</div>
+                <div class="add-article-header">
+                    <h2 style="font-weight: 600;">文章列表</h2>
+                    <button class="btn-add" onclick="openAddModal()">+ 新建文章</button>
+                </div>
+                <div id="articlesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑/新建文章模态框 -->
+    <div id="articleModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeArticleModal()">&times;</span>
+            <h2 id="modalTitle" style="margin-bottom: 30px; font-weight: 600;">新建文章</h2>
+            <form onsubmit="saveArticle(event)">
+                <input type="hidden" id="articleId">
+                <div class="form-group">
+                    <label>标题</label>
+                    <input type="text" id="articleTitle" required placeholder="输入文章标题">
+                </div>
+                <div class="form-group">
+                    <label>标签（用逗号分隔）</label>
+                    <input type="text" id="articleTags" placeholder="例如：英伟达,AI,财报分析">
+                </div>
+                <div class="form-group">
+                    <label>发布日期</label>
+                    <input type="date" id="articleDate" required>
+                </div>
+                <div class="form-group">
+                    <label>内容</label>
+                    <textarea id="articleContent" required placeholder="撰写文章内容..."></textarea>
+                </div>
+                <button type="submit" class="btn-save">保存文章</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let articles = [];
+        let editingId = null;
+
+        // 初始化
+        function init() {
+            loadSettings();
+            loadArticles();
+            renderArticlesList();
+            // 设置默认日期为今天
+            document.getElementById('articleDate').valueAsDate = new Date();
+        }
+
+        // 切换标签页
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            if (tab === 'settings') {
+                document.getElementById('settingsTab').classList.add('active');
+            } else {
+                document.getElementById('articlesTab').classList.add('active');
+            }
+        }
+
+        // 加载网站设置
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('siteSettings') || '{}');
+            document.getElementById('siteTitle').value = settings.title || '百倍机会攻略';
+            document.getElementById('siteSubtitle').value = settings.subtitle || '美股投资洞察';
+            document.getElementById('siteAuthor').value = settings.author || '每日深度研究 · 发现价值机会';
+        }
+
+        // 保存网站设置
+        function saveSettings(event) {
+            event.preventDefault();
+            const settings = {
+                title: document.getElementById('siteTitle').value,
+                subtitle: document.getElementById('siteSubtitle').value,
+                author: document.getElementById('siteAuthor').value
+            };
+            localStorage.setItem('siteSettings', JSON.stringify(settings));
+            showSuccess('settingsSuccess');
+        }
+
+        // 加载文章
+        function loadArticles() {
+            const saved = localStorage.getItem('articles');
+            if (saved) {
+                articles = JSON.parse(saved);
+            }
+        }
+
+        // 保存文章到本地存储
+        function saveArticlesToStorage() {
+            localStorage.setItem('articles', JSON.stringify(articles));
+        }
+
+        // 渲染文章列表
+        function renderArticlesList() {
+            const listEl = document.getElementById('articlesList');
+            
+            if (articles.length === 0) {
+                listEl.innerHTML = '<p style="text-align: center; color: #86868b; padding: 40px;">还没有文章，点击"新建文章"开始创作吧</p>';
+                return;
+            }
+
+            // 按日期倒序排列
+            const sortedArticles = [...articles].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            listEl.innerHTML = sortedArticles.map(article => `
+                <div class="article-item">
+                    <div class="article-item-header">
+                        <div>
+                            <div class="article-item-title">${article.title}</div>
+                            <div class="article-item-meta">
+                                📅 ${article.date} · 📝 ${article.content.length} 字 · 
+                                ${article.tags.map(tag => `<span style="color: #667eea;">#${tag}</span>`).join(' ')}
+                            </div>
+                        </div>
+                        <div class="article-actions">
+                            <button class="btn-edit" onclick="editArticle(${article.id})">编辑</button>
+                            <button class="btn-delete" onclick="deleteArticle(${article.id})">删除</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 打开新建文章模态框
+        function openAddModal() {
+            editingId = null;
+            document.getElementById('modalTitle').textContent = '新建文章';
+            document.getElementById('articleId').value = '';
+            document.getElementById('articleTitle').value = '';
+            document.getElementById('articleTags').value = '';
+            document.getElementById('articleDate').valueAsDate = new Date();
+            document.getElementById('articleContent').value = '';
+            document.getElementById('articleModal').classList.add('active');
+        }
+
+        // 编辑文章
+        function editArticle(id) {
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+
+            editingId = id;
+            document.getElementById('modalTitle').textContent = '编辑文章';
+            document.getElementById('articleId').value = article.id;
+            document.getElementById('articleTitle').value = article.title;
+            document.getElementById('articleTags').value = article.tags.join(',');
+            document.getElementById('articleDate').value = article.date;
+            document.getElementById('articleContent').value = article.content;
+            document.getElementById('articleModal').classList.add('active');
+        }
+
+        // 保存文章
+        function saveArticle(event) {
+            event.preventDefault();
+            
+            const title = document.getElementById('articleTitle').value;
+            const tags = document.getElementById('articleTags').value.split(',').map(t => t.trim()).filter(t => t);
+            const date = document.getElementById('articleDate').value;
+            const content = document.getElementById('articleContent').value;
+
+            if (editingId) {
+                // 编辑现有文章
+                const index = articles.findIndex(a => a.id === editingId);
+                if (index !== -1) {
+                    articles[index] = {
+                        ...articles[index],
+                        title,
+                        tags: tags.length > 0 ? tags : ['美股投资'],
+                        date,
+                        content,
+                        excerpt: content.substring(0, 100) + '...'
+                    };
+                }
+            } else {
+                // 新建文章
+                const newArticle = {
+                    id: Date.now(),
+                    title,
+                    date,
+                    tags: tags.length > 0 ? tags : ['美股投资'],
+                    excerpt: content.substring(0, 100) + '...',
+                    content
+                };
+                articles.unshift(newArticle);
+            }
+
+            saveArticlesToStorage();
+            renderArticlesList();
+            closeArticleModal();
+            showSuccess('articlesSuccess');
+        }
+
+        // 删除文章
+        function deleteArticle(id) {
+            if (!confirm('确定要删除这篇文章吗？')) return;
+            
+            articles = articles.filter(a => a.id !== id);
+            saveArticlesToStorage();
+            renderArticlesList();
+            showSuccess('articlesSuccess');
+        }
+
+        // 关闭模态框
+        function closeArticleModal() {
+            document.getElementById('articleModal').classList.remove('active');
+        }
+
+        // 显示成功消息
+        function showSuccess(elementId) {
+            const el = document.getElementById(elementId);
+            el.classList.add('show');
+            setTimeout(() => {
+                el.classList.remove('show');
+            }, 3000);
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('articleModal');
+            if (event.target === modal) {
+                closeArticleModal();
+            }
+        }
+
+        // 页面加载时初始化
+        init();
+    </script>
+</body>
+</html>

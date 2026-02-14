@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百倍机会攻略 - 美股投资</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            line-height: 1.6;
+            color: #1d1d1f;
+            background: #f5f5f7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 24px;
+            color: white;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            font-weight: 400;
+            opacity: 0.95;
+            margin-bottom: 8px;
+        }
+
+        .author {
+            font-size: 0.95em;
+            opacity: 0.85;
+            font-weight: 300;
+        }
+
+        .admin-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .admin-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .search-container {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 18px 24px;
+            padding-left: 50px;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.05em;
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            box-shadow: 0 6px 30px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #86868b;
+            font-size: 1.2em;
+        }
+
+        .article-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 18px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .article-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            border-color: rgba(102, 126, 234, 0.2);
+        }
+
+        .article-title {
+            font-size: 1.75em;
+            color: #1d1d1f;
+            margin-bottom: 16px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 20px;
+            color: #86868b;
+            font-size: 0.875em;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .article-excerpt {
+            color: #1d1d1f;
+            line-height: 1.7;
+            font-size: 1.05em;
+            opacity: 0.8;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-right: 8px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 60px 20px;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 800px;
+            width: 100%;
+            border-radius: 20px;
+            padding: 60px;
+            position: relative;
+            margin: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            font-size: 28px;
+            color: #86868b;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+            background: #f5f5f7;
+        }
+
+        .close-btn:hover {
+            background: #e8e8ed;
+            color: #1d1d1f;
+            transform: scale(1.05);
+        }
+
+        .article-full {
+            line-height: 1.8;
+        }
+
+        .article-full h2 {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #1d1d1f;
+            font-weight: 600;
+            font-size: 1.5em;
+        }
+
+        .article-full p {
+            margin-bottom: 20px;
+            color: #1d1d1f;
+            font-size: 1.05em;
+            opacity: 0.85;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 100px 20px;
+            color: #86868b;
+        }
+
+        .empty-state svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 24px;
+            opacity: 0.4;
+            stroke: #86868b;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5em;
+            margin-bottom: 12px;
+            color: #1d1d1f;
+            font-weight: 600;
+        }
+
+        .empty-state p {
+            font-size: 1.05em;
+            opacity: 0.8;
+        }
+
+        .highlight {
+            background: rgba(255, 235, 59, 0.3);
+            padding: 2px 0;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #86868b;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 16px;
+            }
+
+            h1 {
+                font-size: 2.5em;
+            }
+
+            header {
+                padding: 40px 20px;
+                margin-bottom: 40px;
+            }
+
+            .article-card {
+                padding: 30px;
+            }
+
+            .modal-content {
+                padding: 40px 24px;
+            }
+
+            .admin-btn {
+                position: static;
+                margin-top: 20px;
+                display: inline-block;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .subtitle {
+                font-size: 1.1em;
+            }
+
+            .article-title {
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="siteTitle">百倍机会攻略</h1>
+            <p class="subtitle" id="siteSubtitle">美股投资洞察</p>
+            <p class="author" id="siteAuthor">每日深度研究 · 发现价值机会</p>
+            <button class="admin-btn" onclick="window.location.href='admin.html'">管理后台</button>
+        </header>
+
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" 
+                   class="search-box" 
+                   id="searchInput" 
+                   placeholder="搜索文章标题、内容或标签..."
+                   oninput="searchArticles()">
+        </div>
+
+        <div id="articleList" class="article-list"></div>
+        
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="12" y1="18" x2="12" y2="12"></line>
+                <line x1="9" y1="15" x2="15" y2="15"></line>
+            </svg>
+            <h3>暂无投资洞察</h3>
+            <p>管理员还没有发布文章</p>
+        </div>
+
+        <div id="noResults" class="no-results" style="display: none;">
+            <h3>未找到相关文章</h3>
+            <p>试试其他关键词吧</p>
+        </div>
+    </div>
+
+    <!-- 阅读文章模态框 -->
+    <div id="readModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeReadModal()">&times;</span>
+            <div id="articleContent" class="article-full"></div>
+        </div>
+    </div>
+
+    <script>
+        let articles = [];
+        let filteredArticles = [];
+
+        // 加载网站设置
+        function loadSiteSettings() {
+            const settings = JSON.parse(localStorage.getItem('siteSettings') || '{}');
+            if (settings.title) document.getElementById('siteTitle').textContent = settings.title;
+            if (settings.subtitle) document.getElementById('siteSubtitle').textContent = settings.subtitle;
+            if (settings.author) document.getElementById('siteAuthor').textContent = settings.author;
+        }
+
+        // 从本地存储加载文章
+        function loadArticles() {
+            const saved = localStorage.getItem('articles');
+            if (saved) {
+                articles = JSON.parse(saved);
+            } else {
+                // 默认示例文章
+                articles = [
+                    {
+                        id: 1,
+                        title: '英伟达财报前瞻：AI革命的下一个里程碑',
+                        date: '2024-02-14',
+                        tags: ['英伟达', 'AI', '财报分析'],
+                        excerpt: 'NVIDIA即将公布Q4财报，市场预期营收将突破200亿美元。从数据中心到汽车芯片，英伟达的AI帝国版图正在快速扩张...',
+                        content: `NVIDIA即将公布Q4财报，市场预期营收将突破200亿美元。从数据中心到汽车芯片，英伟达的AI帝国版图正在快速扩张。
+
+作为AI时代最核心的基础设施提供商，英伟达的每次财报都是整个科技行业的风向标。
+
+本次财报的三大看点：
+
+数据中心业务预计将继续保持三位数增长，主要受益于各大科技巨头的AI基础设施投资加速。Meta、微软、谷歌都在大规模采购H100和H200芯片。
+
+游戏业务有望回暖，随着新一代RTX 50系列显卡的推出，高端GPU市场需求强劲。
+
+汽车芯片业务值得关注，多家车企已经确认将搭载NVIDIA DRIVE平台，这将为公司开辟新的增长曲线。
+
+估值角度来看，当前PE虽然看似偏高，但考虑到AI行业的爆发性增长和公司的垄断地位，仍具有长期配置价值。建议投资者关注财报后的回调机会。`
+                    },
+                    {
+                        id: 2,
+                        title: '微软 vs 谷歌：AI搜索大战谁将胜出？',
+                        date: '2024-02-13',
+                        tags: ['微软', '谷歌', 'AI竞争'],
+                        excerpt: '微软借助OpenAI重新定义搜索体验，谷歌则推出Gemini反击。这场AI搜索之战，将重塑未来十年的互联网格局...',
+                        content: `微软借助OpenAI重新定义搜索体验，谷歌则推出Gemini反击。这场AI搜索之战，将重塑未来十年的互联网格局。
+
+微软的战略布局：
+
+通过130亿美元投资OpenAI，微软获得了GPT技术的独家授权。Bing Chat的推出让微软在搜索市场首次有了挑战谷歌的机会。更重要的是，Office 365全家桶的AI化将带来新的订阅增长点。
+
+谷歌的防守反击：
+
+Gemini的多模态能力理论上超越GPT-4，但产品化速度慢于微软。不过谷歌拥有YouTube、Gmail等海量数据优势，长期AI竞争力不容小觑。搜索广告业务虽然受到冲击，但短期内仍是现金牛。
+
+投资建议：
+
+从风险收益比来看，微软当前估值更具吸引力。云计算+AI双轮驱动的增长模式更加确定，而谷歌面临搜索业务被颠覆的风险。建议超配微软，标配谷歌。`
+                    }
+                ];
+                localStorage.setItem('articles', JSON.stringify(articles));
+            }
+            filteredArticles = [...articles];
+            renderArticles();
+        }
+
+        // 搜索文章
+        function searchArticles() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            if (!keyword) {
+                filteredArticles = [...articles];
+                renderArticles();
+                return;
+            }
+
+            filteredArticles = articles.filter(article => {
+                const titleMatch = article.title.toLowerCase().includes(keyword);
+                const contentMatch = article.content.toLowerCase().includes(keyword);
+                const tagsMatch = article.tags.some(tag => tag.toLowerCase().includes(keyword));
+                return titleMatch || contentMatch || tagsMatch;
+            });
+
+            renderArticles(keyword);
+        }
+
+        // 高亮关键词
+        function highlightKeyword(text, keyword) {
+            if (!keyword) return text;
+            const regex = new RegExp(`(${keyword})`, 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        // 渲染文章列表
+        function renderArticles(keyword = '') {
+            const listEl = document.getElementById('articleList');
+            const emptyEl = document.getElementById('emptyState');
+            const noResultsEl = document.getElementById('noResults');
+            
+            if (articles.length === 0) {
+                listEl.innerHTML = '';
+                emptyEl.style.display = 'block';
+                noResultsEl.style.display = 'none';
+                return;
+            }
+
+            if (filteredArticles.length === 0) {
+                listEl.innerHTML = '';
+                emptyEl.style.display = 'none';
+                noResultsEl.style.display = 'block';
+                return;
+            }
+            
+            emptyEl.style.display = 'none';
+            noResultsEl.style.display = 'none';
+            
+            listEl.innerHTML = filteredArticles.map(article => {
+                const title = keyword ? highlightKeyword(article.title, keyword) : article.title;
+                const excerpt = keyword ? highlightKeyword(article.excerpt, keyword) : article.excerpt;
+                const tags = article.tags.map(tag => {
+                    const highlightedTag = keyword ? highlightKeyword(tag, keyword) : tag;
+                    return `<span class="tag">${highlightedTag}</span>`;
+                }).join('');
+                
+                return `
+                    <div class="article-card" onclick="openArticle(${article.id})">
+                        <h2 class="article-title">${title}</h2>
+                        <div class="article-meta">
+                            <span>📅 ${article.date}</span>
+                            <span>📝 ${article.content.length} 字</span>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            ${tags}
+                        </div>
+                        <p class="article-excerpt">${excerpt}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 打开文章阅读
+        function openArticle(id) {
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+            
+            const contentEl = document.getElementById('articleContent');
+            contentEl.innerHTML = `
+                <h1 style="margin-bottom: 20px;">${article.title}</h1>
+                <div class="article-meta" style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee;">
+                    <span>📅 ${article.date}</span>
+                    <span>📝 ${article.content.length} 字</span>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    ${article.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+                <div>${article.content.split('\n').map(p => p.trim() ? `<p>${p}</p>` : '<br>').join('')}</div>
+            `;
+            
+            document.getElementById('readModal').classList.add('active');
+        }
+
+        function closeReadModal() {
+            document.getElementById('readModal').classList.remove('active');
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const readModal = document.getElementById('readModal');
+            if (event.target === readModal) {
+                closeReadModal();
+            }
+        }
+
+        // 页面加载时初始化
+        loadSiteSettings();
+        loadArticles();
+    </script>
+</body>
+</html>
