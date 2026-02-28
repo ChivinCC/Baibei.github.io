@@ -1,639 +1,1302 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理后台 - 百倍机会攻略</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>后台管理 — 百倍机会攻略</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap');
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
-            line-height: 1.6;
-            color: #1d1d1f;
-            background: #f5f5f7;
-            -webkit-font-smoothing: antialiased;
-        }
+:root {
+  --bg:      #0a0a0f;
+  --sf:      #13131a;
+  --sf2:     #1c1c26;
+  --bd:      rgba(255,255,255,0.08);
+  --bd2:     rgba(255,255,255,0.14);
+  --t1:      #f0f0f5;
+  --t2:      #9090a8;
+  --t3:      #5a5a72;
+  --ac:      #4f8ef7;
+  --ac-glow: rgba(79,142,247,0.25);
+  --red:     #ff453a;
+  --red-bg:  rgba(255,69,58,0.12);
+  --grn:     #30d158;
+  --grn-bg:  rgba(48,209,88,0.12);
+  --r:       14px;
+  --rs:      8px;
+}
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans SC', -apple-system, sans-serif; background: var(--bg); color: var(--t1); min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            padding: 30px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
+/* ── LOGIN ── */
+#loginScreen {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg); z-index: 1000;
+  animation: fadeIn .4s ease;
+}
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
-        .header h1 {
-            font-size: 2em;
-            font-weight: 600;
-        }
+.login-card {
+  width: 380px; background: var(--sf);
+  border: 1px solid var(--bd2); border-radius: 20px;
+  padding: 48px 40px;
+  box-shadow: 0 0 80px rgba(79,142,247,.08), 0 40px 80px rgba(0,0,0,.5);
+}
+.login-logo { text-align: center; margin-bottom: 36px; }
+.login-icon {
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg,#4f8ef7,#7b5af5);
+  border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 14px; box-shadow: 0 8px 24px rgba(79,142,247,.35);
+}
+.login-icon svg { width: 28px; height: 28px; color:#fff; }
+.login-logo h1 { font-family:'Noto Serif SC',serif; font-size:18px; font-weight:700; color:var(--t1); }
+.login-logo p { font-size:13px; color:var(--t2); margin-top:4px; }
 
-        .back-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.95em;
-            font-weight: 500;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
+.fg { margin-bottom:16px; }
+.fg label { display:block; font-size:12px; font-weight:500; color:var(--t2); margin-bottom:8px; text-transform:uppercase; letter-spacing:.06em; }
+.fg input {
+  width:100%; padding:12px 16px;
+  background:var(--sf2); border:1px solid var(--bd2); border-radius:var(--rs);
+  color:var(--t1); font-size:15px; font-family:inherit; outline:none;
+  transition:border-color .2s, box-shadow .2s;
+}
+.fg input:focus { border-color:var(--ac); box-shadow:0 0 0 3px var(--ac-glow); }
 
-        .back-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
+.btn-login {
+  width:100%; padding:13px;
+  background:linear-gradient(135deg,#4f8ef7,#7b5af5);
+  border:none; border-radius:var(--rs); color:#fff;
+  font-size:15px; font-weight:500; font-family:inherit; cursor:pointer;
+  margin-top:8px; transition:opacity .2s, transform .15s;
+  box-shadow:0 4px 16px rgba(79,142,247,.4);
+}
+.btn-login:hover { opacity:.9; transform:translateY(-1px); }
+.btn-login:active { transform:none; }
+.login-err { font-size:13px; color:var(--red); text-align:center; margin-top:12px; min-height:20px; }
 
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            background: white;
-            padding: 10px;
-            border-radius: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
+/* ── APP LAYOUT ── */
+#adminApp { display:none; min-height:100vh; }
+.layout { display:flex; min-height:100vh; }
 
-        .tab {
-            flex: 1;
-            padding: 16px;
-            background: transparent;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 500;
-            color: #86868b;
-            transition: all 0.3s;
-        }
+/* Sidebar */
+.sidebar {
+  width:220px; background:var(--sf); border-right:1px solid var(--bd);
+  display:flex; flex-direction:column; flex-shrink:0;
+  position:sticky; top:0; height:100vh; overflow-y:auto;
+}
+.sb-brand { padding:24px 20px 20px; border-bottom:1px solid var(--bd); }
+.sb-brand-name { font-family:'Noto Serif SC',serif; font-size:14px; font-weight:700; color:var(--t1); display:block; }
+.sb-brand-sub { font-size:11px; color:var(--t3); margin-top:2px; display:block; }
+.sb-nav { padding:16px 12px; flex:1; }
+.nav-item {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; border-radius:var(--rs); cursor:pointer;
+  font-size:14px; color:var(--t2); transition:background .15s, color .15s;
+  margin-bottom:2px; user-select:none;
+}
+.nav-item svg { width:16px; height:16px; flex-shrink:0; }
+.nav-item:hover { background:var(--sf2); color:var(--t1); }
+.nav-item.active { background:rgba(79,142,247,.15); color:var(--ac); }
+.sb-footer { padding:16px 12px; border-top:1px solid var(--bd); }
+.btn-logout {
+  display:flex; align-items:center; gap:8px; width:100%;
+  padding:9px 12px; background:none; border:1px solid var(--bd);
+  border-radius:var(--rs); color:var(--t2); font-size:13px;
+  font-family:inherit; cursor:pointer; transition:border-color .15s, color .15s;
+}
+.btn-logout svg { width:14px; height:14px; }
+.btn-logout:hover { border-color:var(--red); color:var(--red); }
 
-        .tab.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
+/* Main */
+.main { flex:1; display:flex; flex-direction:column; min-width:0; }
+.topbar {
+  padding:20px 32px; border-bottom:1px solid var(--bd);
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  background:var(--sf); position:sticky; top:0; z-index:50;
+}
+.topbar-title { font-size:18px; font-weight:600; color:var(--t1); }
+.topbar-actions { display:flex; gap:10px; }
 
-        .tab-content {
-            display: none;
-        }
+/* Buttons */
+.btn {
+  display:inline-flex; align-items:center; gap:7px;
+  padding:9px 18px; border-radius:var(--rs);
+  font-size:14px; font-weight:500; font-family:inherit;
+  cursor:pointer; border:none; transition:opacity .15s, transform .15s;
+}
+.btn:hover { opacity:.85; }
+.btn:active { transform:scale(.98); }
+.btn svg { width:15px; height:15px; }
+.btn-primary { background:var(--ac); color:#fff; }
+.btn-ghost { background:var(--sf2); color:var(--t2); border:1px solid var(--bd); }
+.btn-danger { background:var(--red-bg); color:var(--red); border:1px solid rgba(255,69,58,.2); }
 
-        .tab-content.active {
-            display: block;
-        }
+/* ── VIEWS ── */
+#listView, #editorView, #settingsView { display:none; }
+#listView.vactive, #editorView.vactive, #settingsView.vactive { display:block; }
 
-        .settings-panel {
-            background: white;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
+/* List view */
+.content-area { padding:28px 32px; flex:1; }
+.stats-row { display:flex; gap:16px; margin-bottom:28px; }
+.stat-card { flex:1; background:var(--sf); border:1px solid var(--bd); border-radius:var(--r); padding:20px 24px; }
+.stat-label { font-size:12px; color:var(--t3); text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px; }
+.stat-value { font-size:28px; font-weight:700; color:var(--t1); font-family:'Noto Serif SC',serif; }
 
-        .form-group {
-            margin-bottom: 28px;
-        }
+.table-wrap { background:var(--sf); border:1px solid var(--bd); border-radius:var(--r); overflow:hidden; }
+.table-head {
+  display:grid; grid-template-columns:1fr 130px 90px 110px;
+  padding:12px 20px; border-bottom:1px solid var(--bd);
+  font-size:11px; color:var(--t3); text-transform:uppercase; letter-spacing:.06em;
+}
+.trow {
+  display:grid; grid-template-columns:56px 1fr 130px 90px 110px;
+  padding:12px 20px; border-bottom:1px solid var(--bd);
+  align-items:center; gap:12px; transition:background .15s;
+}
+.trow-cover {
+  width:56px; height:36px; border-radius:4px;
+  overflow:hidden; background:var(--sf2); flex-shrink:0;
+  border:1px solid var(--bd);
+}
+.trow-cover img { width:100%; height:100%; object-fit:cover; display:block; }
+.trow-cover-ph {
+  width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+  color:var(--t3); font-size:16px;
+}
+.trow:last-child { border-bottom:none; }
+.trow:hover { background:var(--sf2); }
+.trow-title { font-size:14px; font-weight:500; color:var(--t1); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.trow-summary { font-size:12px; color:var(--t3); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.trow-date { font-size:13px; color:var(--t2); }
+.tag-pill { display:inline-flex; align-items:center; background:rgba(79,142,247,.12); color:var(--ac); border-radius:980px; padding:2px 9px; font-size:11px; font-weight:500; }
+.row-actions { display:flex; gap:6px; justify-content:flex-end; }
+.icon-btn {
+  width:32px; height:32px; display:flex; align-items:center; justify-content:center;
+  border-radius:var(--rs); border:1px solid var(--bd); background:none; color:var(--t2);
+  cursor:pointer; transition:background .15s, color .15s;
+}
+.icon-btn:hover { background:var(--sf2); color:var(--t1); }
+.icon-btn.del:hover { background:var(--red-bg); color:var(--red); border-color:rgba(255,69,58,.2); }
+.icon-btn svg { width:15px; height:15px; }
+.empty-table { text-align:center; padding:60px 20px; color:var(--t3); }
+.empty-table svg { width:40px; height:40px; margin:0 auto 12px; display:block; opacity:.3; }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 12px;
-            color: #1d1d1f;
-            font-weight: 500;
-            font-size: 0.95em;
-        }
+/* Editor view */
+.editor-layout {
+  display:grid; grid-template-columns:1fr 280px;
+  gap:20px; padding:28px 32px; align-items:start;
+}
+.editor-main { display:flex; flex-direction:column; gap:16px; }
+.title-input {
+  width:100%; background:var(--sf); border:1px solid var(--bd); border-radius:var(--r);
+  padding:20px 24px; font-family:'Noto Serif SC',serif; font-size:22px; font-weight:600;
+  color:var(--t1); outline:none; transition:border-color .2s;
+  resize:none; min-height:72px; line-height:1.4;
+}
+.title-input:focus { border-color:var(--ac); }
+.title-input::placeholder { color:var(--t3); }
 
-        .form-group input {
-            width: 100%;
-            padding: 16px;
-            border: 1px solid #d2d2d7;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 1em;
-            transition: all 0.2s;
-            background: #fbfbfd;
-        }
+/* Toolbar */
+.editor-toolbar {
+  background:var(--sf); border:1px solid var(--bd); border-radius:var(--rs);
+  padding:8px 12px; display:flex; gap:2px; flex-wrap:wrap; align-items:center;
+  position:sticky; top:65px; z-index:40;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+}
+.tb-btn {
+  width:32px; height:32px; display:flex; align-items:center; justify-content:center;
+  border:none; background:none; color:var(--t2); border-radius:6px;
+  cursor:pointer; font-size:13px; font-family:inherit; font-weight:600;
+  transition:background .15s, color .15s;
+}
+.tb-btn:hover { background:var(--sf2); color:var(--t1); }
+.tb-btn svg { width:15px; height:15px; }
+.tb-sep { width:1px; height:22px; background:var(--bd); margin:0 6px; flex-shrink:0; }
 
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-        }
+/* Rich editor */
+.rich-editor {
+  background:var(--sf); border:1px solid var(--bd); border-radius:var(--r);
+  min-height:480px; padding:24px; color:var(--t1); font-size:16px; line-height:1.8;
+  outline:none; overflow-y:auto; transition:border-color .2s;
+}
+.rich-editor:focus { border-color:var(--ac); }
+.rich-editor:empty::before { content:attr(data-placeholder); color:var(--t3); pointer-events:none; }
+.rich-editor h2 { font-family:'Noto Serif SC',serif; font-size:20px; font-weight:600; margin:28px 0 12px; }
+.rich-editor h3 { font-family:'Noto Serif SC',serif; font-size:17px; font-weight:600; margin:20px 0 10px; }
+.rich-editor p { margin-bottom:14px; }
+.rich-editor blockquote { border-left:3px solid var(--ac); padding:10px 18px; margin:20px 0; background:rgba(79,142,247,.06); border-radius:0 6px 6px 0; color:var(--t2); font-style:italic; }
+.rich-editor img { max-width:100%; border-radius:8px; margin:16px 0; display:block; border:2px solid transparent; transition:border-color .15s; cursor:pointer; }
+.rich-editor img:hover { border-color:var(--ac); }
+.rich-editor ul, .rich-editor ol { padding-left:22px; margin-bottom:14px; }
+.rich-editor li { margin-bottom:6px; }
+.rich-editor a { color:var(--ac); }
+.rich-editor video { width:100%; border-radius:8px; margin:16px 0; display:block; }
 
-        .btn-save {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 16px 40px;
-            border-radius: 12px;
-            font-size: 1em;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
-        }
+/* Editor sidebar cards */
+.editor-sidebar { display:flex; flex-direction:column; gap:14px; }
+.sb-card { background:var(--sf); border:1px solid var(--bd); border-radius:var(--r); padding:18px; }
+.sb-card-title { font-size:12px; font-weight:500; text-transform:uppercase; letter-spacing:.07em; color:var(--t3); margin-bottom:14px; }
+.fl { font-size:12px; color:var(--t2); margin-bottom:6px; display:block; }
+.fi, .fta {
+  width:100%; padding:9px 12px; background:var(--sf2); border:1px solid var(--bd);
+  border-radius:var(--rs); color:var(--t1); font-size:13px; font-family:inherit;
+  outline:none; transition:border-color .2s; margin-bottom:10px;
+}
+.fi:focus, .fta:focus { border-color:var(--ac); }
+.fta { resize:vertical; min-height:80px; line-height:1.6; }
 
-        .btn-save:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
+/* Tags */
+.tags-wrap {
+  display:flex; flex-wrap:wrap; gap:6px; padding:8px;
+  background:var(--sf2); border:1px solid var(--bd); border-radius:var(--rs);
+  min-height:40px; cursor:text; margin-bottom:10px;
+}
+.tags-wrap:focus-within { border-color:var(--ac); }
+.tag-chip {
+  display:inline-flex; align-items:center; gap:4px;
+  background:rgba(79,142,247,.15); color:var(--ac);
+  border-radius:980px; padding:2px 10px; font-size:12px;
+}
+.tag-chip button { background:none; border:none; color:inherit; cursor:pointer; font-size:14px; line-height:1; padding:0; opacity:.7; }
+.tag-chip button:hover { opacity:1; }
+.tag-real-input { border:none; outline:none; background:transparent; color:var(--t1); font-size:12px; font-family:inherit; flex:1; min-width:80px; }
 
-        .articles-panel {
-            background: white;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
+/* Cover */
+.cover-prev {
+  width:100%; aspect-ratio:2.35/1; border-radius:var(--rs); background:var(--sf2);
+  border:1px solid var(--bd); display:flex; align-items:center; justify-content:center;
+  overflow:hidden; margin-bottom:10px; cursor:pointer; transition:border-color .15s; position:relative;
+}
+.cover-prev:hover { border-color:var(--ac); }
+.cover-prev img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+.cover-ph { display:flex; flex-direction:column; align-items:center; gap:6px; color:var(--t3); font-size:12px; }
+.cover-ph svg { width:24px; height:24px; }
 
-        .add-article-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
+/* Toast */
+.toast-wrap { position:fixed; bottom:24px; right:24px; display:flex; flex-direction:column; gap:10px; z-index:9999; }
+.toast { padding:12px 20px; border-radius:var(--rs); font-size:14px; font-weight:500; animation:slideUp .3s ease; box-shadow:0 8px 24px rgba(0,0,0,.4); }
+@keyframes slideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+.toast.ok  { background:var(--grn-bg); color:var(--grn); border:1px solid rgba(48,209,88,.2); }
+.toast.err { background:var(--red-bg); color:var(--red); border:1px solid rgba(255,69,58,.2); }
+.toast.inf { background:rgba(79,142,247,.15); color:var(--ac); border:1px solid rgba(79,142,247,.2); }
 
-        .btn-add {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 10px;
-            font-size: 0.95em;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+/* Modal */
+.modal-ov { position:fixed; inset:0; background:rgba(0,0,0,.7); display:flex; align-items:center; justify-content:center; z-index:500; backdrop-filter:blur(4px); }
+.modal { background:var(--sf); border:1px solid var(--bd2); border-radius:18px; padding:32px; width:480px; max-width:90vw; box-shadow:0 40px 80px rgba(0,0,0,.5); }
+.modal h3 { font-size:17px; font-weight:600; margin-bottom:8px; }
+.modal p { font-size:14px; color:var(--t2); margin-bottom:24px; line-height:1.6; }
+.modal-acts { display:flex; gap:10px; justify-content:flex-end; }
+.modal input { width:100%; padding:10px 14px; background:var(--sf2); border:1px solid var(--bd); border-radius:var(--rs); color:var(--t1); font-size:14px; font-family:inherit; outline:none; margin-bottom:16px; }
+.modal input:focus { border-color:var(--ac); }
 
-        .btn-add:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
+/* Settings */
+#settingsView .settings-wrap { padding:28px 32px; }
+.settings-card { background:var(--sf); border:1px solid var(--bd); border-radius:var(--r); padding:28px; max-width:520px; margin-bottom:20px; }
+.settings-card h3 { font-size:16px; font-weight:600; margin-bottom:20px; }
+.settings-row { margin-bottom:16px; }
+.settings-row label { display:block; font-size:12px; color:var(--t2); margin-bottom:6px; text-transform:uppercase; letter-spacing:.05em; }
+.settings-input { width:100%; padding:10px 14px; background:var(--sf2); border:1px solid var(--bd); border-radius:var(--rs); color:var(--t1); font-size:14px; font-family:inherit; outline:none; }
+.settings-input:focus { border-color:var(--ac); }
+.danger-card { border-color:rgba(255,69,58,.3); }
+.danger-card h3 { color:var(--red); }
 
-        .article-item {
-            padding: 24px;
-            border: 1px solid #e8e8ed;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            transition: all 0.3s;
-        }
+/* Scrollbar */
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--bd2); border-radius:3px; }
 
-        .article-item:hover {
-            border-color: #667eea;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-        }
+/* ── RESPONSIVE ──────────────────────────────────── */
 
-        .article-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 12px;
-        }
+/* Tablet (768–900px) */
+@media(max-width:900px) {
+  .editor-layout { grid-template-columns:1fr; }
+  .editor-sidebar { order:-1; }
+  .table-head { grid-template-columns:1fr 90px; }
+  .trow { grid-template-columns:1fr 90px; }
+  .trow > *:nth-child(1) { display:none; } /* 移动端隐藏封面 */
+  .table-head > *:nth-child(2), .table-head > *:nth-child(3),
+  .trow > *:nth-child(2), .trow > *:nth-child(3) { display:none; }
+  .topbar { padding:16px 20px; }
+  .content-area { padding:20px; }
+  .editor-layout { padding:20px; }
+}
 
-        .article-item-title {
-            font-size: 1.2em;
-            font-weight: 600;
-            color: #1d1d1f;
-            margin-bottom: 8px;
-        }
+/* Mobile (<768px): sidebar collapses to top bar */
+@media(max-width:767px) {
+  /* Sidebar becomes a top strip */
+  .layout { flex-direction:column; }
+  .sidebar {
+    width:100%; height:auto; position:relative;
+    flex-direction:row; align-items:center;
+    border-right:none; border-bottom:1px solid var(--bd);
+    padding:0;
+  }
+  .sb-brand { padding:12px 16px; border-bottom:none; border-right:1px solid var(--bd); flex-shrink:0; }
+  .sb-brand-sub { display:none; }
+  .sb-brand-name { font-size:13px; }
+  .sb-nav { padding:8px 12px; display:flex; flex-direction:row; gap:4px; flex:1; }
+  .nav-item { padding:7px 10px; font-size:13px; margin-bottom:0; }
+  .sb-footer { padding:8px 12px; border-top:none; border-left:1px solid var(--bd); }
+  .btn-logout { padding:7px 10px; font-size:12px; }
+  .btn-logout span { display:none; }
 
-        .article-item-meta {
-            color: #86868b;
-            font-size: 0.9em;
-        }
+  /* Topbar */
+  .topbar { padding:12px 16px; flex-wrap:wrap; gap:8px; position:relative; }
+  .topbar-title { font-size:15px; }
+  .btn { padding:7px 12px; font-size:13px; }
 
-        .article-actions {
-            display: flex;
-            gap: 10px;
-        }
+  /* Content areas */
+  .content-area { padding:16px; }
+  .stats-row { flex-direction:column; gap:10px; }
+  .stat-card { padding:14px 16px; }
+  .stat-value { font-size:22px; }
 
-        .btn-edit, .btn-delete {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
+  /* Table */
+  .table-head { display:none; }
+  .trow {
+    display:flex; flex-direction:column; gap:6px;
+    padding:12px 14px; align-items:flex-start;
+  }
+  .row-actions { width:100%; justify-content:flex-start; }
 
-        .btn-edit {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-        }
+  /* Editor */
+  .editor-layout { padding:16px; gap:14px; grid-template-columns:1fr; }
+  .title-input { font-size:18px; padding:14px 16px; }
+  .rich-editor { min-height:300px; padding:16px; font-size:15px; }
+  .editor-toolbar { gap:1px; padding:6px 8px; }
+  .tb-btn { width:28px; height:28px; font-size:12px; }
 
-        .btn-edit:hover {
-            background: rgba(102, 126, 234, 0.2);
-        }
+  /* Settings */
+  .settings-wrap { padding:16px !important; }
+  .settings-card { padding:18px; }
 
-        .btn-delete {
-            background: rgba(255, 59, 48, 0.1);
-            color: #ff3b30;
-        }
+  /* Login card */
+  .login-card { width:calc(100vw - 32px); padding:36px 24px; }
 
-        .btn-delete:hover {
-            background: rgba(255, 59, 48, 0.2);
-        }
+  /* Toast bottom center on mobile */
+  .toast-wrap { right:16px; left:16px; bottom:16px; }
+  .toast { text-align:center; }
+}
 
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-
-        .modal.active {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 60px 20px;
-        }
-
-        .modal-content {
-            background: white;
-            max-width: 800px;
-            width: 100%;
-            border-radius: 20px;
-            padding: 40px;
-            position: relative;
-            margin: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 28px;
-            color: #86868b;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: #f5f5f7;
-            transition: all 0.2s;
-        }
-
-        .close-btn:hover {
-            background: #e8e8ed;
-            transform: scale(1.05);
-        }
-
-        .form-group textarea {
-            width: 100%;
-            padding: 16px;
-            border: 1px solid #d2d2d7;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 1em;
-            min-height: 300px;
-            resize: vertical;
-            line-height: 1.6;
-            background: #fbfbfd;
-            transition: all 0.2s;
-        }
-
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-        }
-
-        .success-message {
-            background: rgba(52, 199, 89, 0.1);
-            color: #34c759;
-            padding: 16px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .success-message.show {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px 16px;
-            }
-
-            .header {
-                flex-direction: column;
-                gap: 20px;
-                align-items: flex-start;
-            }
-
-            .tabs {
-                flex-direction: column;
-            }
-
-            .article-item-header {
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .modal-content {
-                padding: 30px 20px;
-            }
-        }
-    </style>
+/* Very small (<400px) */
+@media(max-width:400px) {
+  .nav-item { font-size:12px; padding:6px 8px; }
+  .topbar-actions { width:100%; }
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🎯 管理后台</h1>
-            <a href="index.html" class="back-btn">返回前台</a>
-        </div>
 
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('settings')">网站设置</button>
-            <button class="tab" onclick="switchTab('articles')">文章管理</button>
-        </div>
-
-        <!-- 网站设置 -->
-        <div id="settingsTab" class="tab-content active">
-            <div class="settings-panel">
-                <div id="settingsSuccess" class="success-message">保存成功！</div>
-                <h2 style="margin-bottom: 30px; font-weight: 600;">网站信息</h2>
-                <form onsubmit="saveSettings(event)">
-                    <div class="form-group">
-                        <label>网站标题</label>
-                        <input type="text" id="siteTitle" required placeholder="例如：百倍机会攻略">
-                    </div>
-                    <div class="form-group">
-                        <label>副标题</label>
-                        <input type="text" id="siteSubtitle" required placeholder="例如：美股投资洞察">
-                    </div>
-                    <div class="form-group">
-                        <label>作者签名</label>
-                        <input type="text" id="siteAuthor" required placeholder="例如：每日深度研究 · 发现价值机会">
-                    </div>
-                    <button type="submit" class="btn-save">保存设置</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- 文章管理 -->
-        <div id="articlesTab" class="tab-content">
-            <div class="articles-panel">
-                <div id="articlesSuccess" class="success-message">操作成功！</div>
-                <div class="add-article-header">
-                    <h2 style="font-weight: 600;">文章列表</h2>
-                    <button class="btn-add" onclick="openAddModal()">+ 新建文章</button>
-                </div>
-                <div id="articlesList"></div>
-            </div>
-        </div>
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2"/>
+          <path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+      </div>
+      <h1>百倍机会攻略</h1>
+      <p>内容管理后台</p>
     </div>
-
-    <!-- 编辑/新建文章模态框 -->
-    <div id="articleModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeArticleModal()">&times;</span>
-            <h2 id="modalTitle" style="margin-bottom: 30px; font-weight: 600;">新建文章</h2>
-            <form onsubmit="saveArticle(event)">
-                <input type="hidden" id="articleId">
-                <div class="form-group">
-                    <label>标题</label>
-                    <input type="text" id="articleTitle" required placeholder="输入文章标题">
-                </div>
-                <div class="form-group">
-                    <label>标签（用逗号分隔）</label>
-                    <input type="text" id="articleTags" placeholder="例如：英伟达,AI,财报分析">
-                </div>
-                <div class="form-group">
-                    <label>发布日期</label>
-                    <input type="date" id="articleDate" required>
-                </div>
-                <div class="form-group">
-                    <label>内容</label>
-                    <textarea id="articleContent" required placeholder="撰写文章内容..."></textarea>
-                </div>
-                <button type="submit" class="btn-save">保存文章</button>
-            </form>
-        </div>
+    <div class="fg">
+      <label>管理员密码</label>
+      <input type="password" id="pwdInput" placeholder="请输入密码" autocomplete="current-password">
     </div>
+    <button class="btn-login" onclick="doLogin()">进入后台</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
 
-    <script>
-        let articles = [];
-        let editingId = null;
+<!-- ADMIN APP -->
+<div id="adminApp">
+  <div class="layout">
 
-        // 初始化
-        function init() {
-            loadSettings();
-            loadArticles();
-            renderArticlesList();
-            // 设置默认日期为今天
-            document.getElementById('articleDate').valueAsDate = new Date();
-        }
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sb-brand">
+        <span class="sb-brand-name">百倍机会攻略</span>
+        <span class="sb-brand-sub">内容管理后台</span>
+      </div>
+      <nav class="sb-nav">
+        <div class="nav-item" id="navList" onclick="switchView('list')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+          文章管理
+        </div>
+        <div class="nav-item" id="navSettings" onclick="switchView('settings')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          站点设置
+        </div>
+      </nav>
+      <div class="sb-footer">
+        <button class="btn-logout" onclick="doLogout()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          退出登录
+        </button>
+      </div>
+    </aside>
 
-        // 切换标签页
-        function switchTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            if (tab === 'settings') {
-                document.getElementById('settingsTab').classList.add('active');
-            } else {
-                document.getElementById('articlesTab').classList.add('active');
-            }
-        }
+    <main class="main">
 
-        // 加载网站设置
-        function loadSettings() {
-            const settings = JSON.parse(localStorage.getItem('siteSettings') || '{}');
-            document.getElementById('siteTitle').value = settings.title || '百倍机会攻略';
-            document.getElementById('siteSubtitle').value = settings.subtitle || '美股投资洞察';
-            document.getElementById('siteAuthor').value = settings.author || '每日深度研究 · 发现价值机会';
-        }
+      <!-- LIST VIEW -->
+      <div id="listView">
+        <div class="topbar">
+          <div class="topbar-title">文章管理</div>
+          <div class="topbar-actions">
+            <button class="btn btn-primary" onclick="newArticle()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+              新建文章
+            </button>
+          </div>
+        </div>
+        <div class="content-area">
+          <div class="stats-row">
+            <div class="stat-card"><div class="stat-label">文章总数</div><div class="stat-value" id="statTotal">0</div></div>
+            <div class="stat-card"><div class="stat-label">本月发布</div><div class="stat-value" id="statMonth">0</div></div>
+            <div class="stat-card"><div class="stat-label">最近更新</div><div class="stat-value" id="statLast" style="font-size:15px;padding-top:6px">—</div></div>
+          </div>
+          <div class="table-wrap">
+            <div class="table-head">
+              <span>标题</span><span>日期</span><span>标签</span><span style="text-align:right">操作</span>
+            </div>
+            <div id="articleTable"></div>
+          </div>
+        </div>
+      </div>
 
-        // 保存网站设置
-        function saveSettings(event) {
-            event.preventDefault();
-            const settings = {
-                title: document.getElementById('siteTitle').value,
-                subtitle: document.getElementById('siteSubtitle').value,
-                author: document.getElementById('siteAuthor').value
-            };
-            localStorage.setItem('siteSettings', JSON.stringify(settings));
-            showSuccess('settingsSuccess');
-        }
-
-        // 加载文章
-        function loadArticles() {
-            const saved = localStorage.getItem('articles');
-            if (saved) {
-                articles = JSON.parse(saved);
-            }
-        }
-
-        // 保存文章到本地存储
-        function saveArticlesToStorage() {
-            localStorage.setItem('articles', JSON.stringify(articles));
-        }
-
-        // 渲染文章列表
-        function renderArticlesList() {
-            const listEl = document.getElementById('articlesList');
-            
-            if (articles.length === 0) {
-                listEl.innerHTML = '<p style="text-align: center; color: #86868b; padding: 40px;">还没有文章，点击"新建文章"开始创作吧</p>';
-                return;
-            }
-
-            // 按日期倒序排列
-            const sortedArticles = [...articles].sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            listEl.innerHTML = sortedArticles.map(article => `
-                <div class="article-item">
-                    <div class="article-item-header">
-                        <div>
-                            <div class="article-item-title">${article.title}</div>
-                            <div class="article-item-meta">
-                                📅 ${article.date} · 📝 ${article.content.length} 字 · 
-                                ${article.tags.map(tag => `<span style="color: #667eea;">#${tag}</span>`).join(' ')}
-                            </div>
-                        </div>
-                        <div class="article-actions">
-                            <button class="btn-edit" onclick="editArticle(${article.id})">编辑</button>
-                            <button class="btn-delete" onclick="deleteArticle(${article.id})">删除</button>
-                        </div>
-                    </div>
+      <!-- EDITOR VIEW -->
+      <div id="editorView">
+        <div class="topbar">
+          <div class="topbar-title" id="editorTitle">新建文章</div>
+          <div class="topbar-actions">
+            <button class="btn btn-ghost" onclick="cancelEdit()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M5 12l7-7M5 12l7 7"/></svg>
+              返回
+            </button>
+            <button class="btn btn-primary" onclick="saveArticle()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              保存文章
+            </button>
+          </div>
+        </div>
+        <div class="editor-layout">
+          <div class="editor-main">
+            <textarea class="title-input" id="editTitle" placeholder="文章标题…" rows="1" oninput="autoResize(this)"></textarea>
+            <div class="editor-toolbar">
+              <button class="tb-btn" title="粗体" onclick="fmt('bold')"><b>B</b></button>
+              <button class="tb-btn" title="斜体" onclick="fmt('italic')"><i style="font-style:italic">I</i></button>
+              <button class="tb-btn" title="下划线" onclick="fmt('underline')"><u>U</u></button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" title="H2标题" onclick="fmt('h2')">H2</button>
+              <button class="tb-btn" title="H3标题" onclick="fmt('h3')">H3</button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" title="列表" onclick="fmt('insertUnorderedList')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
+              </button>
+              <button class="tb-btn" title="引用" onclick="fmt('blockquote')">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1zm12 0c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+              </button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" title="插入链接" onclick="insertLink()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+              </button>
+              <button class="tb-btn" title="插入图片" onclick="insertImage()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </button>
+              <button class="tb-btn" title="插入视频" onclick="insertVideo()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+              </button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" title="撤销" onclick="document.execCommand('undo')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 00-9-9 9 9 0 00-6 2.3L3 13"/></svg>
+              </button>
+              <button class="tb-btn" title="清除格式" onclick="clearFormat()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/><line x1="2" y1="2" x2="22" y2="22" stroke-width="1.5"/></svg>
+              </button>
+            </div>
+            <div class="rich-editor" id="richEditor" contenteditable="true" data-placeholder="开始写文章内容…支持图片、视频、引用等富文本格式"></div>
+          </div>
+          <div class="editor-sidebar">
+            <div class="sb-card">
+              <div class="sb-card-title">文章信息</div>
+              <label class="fl">发布日期</label>
+              <input type="date" class="fi" id="editDate">
+              <label class="fl">简介（显示在首页）</label>
+              <textarea class="fta" id="editSummary" placeholder="简要描述这篇文章的内容…"></textarea>
+              <label class="fl">标签（回车确认）</label>
+              <div class="tags-wrap" id="tagsWrap" onclick="document.getElementById('tagInput').focus()">
+                <input class="tag-real-input" id="tagInput" placeholder="输入标签…" onkeydown="handleTagInput(event)">
+              </div>
+            </div>
+            <div class="sb-card">
+              <div class="sb-card-title">封面图片（2.35:1）</div>
+              <div class="cover-prev" id="coverPrev" onclick="document.getElementById('coverFileInput').click()">
+                <div class="cover-ph" id="coverPh">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <span>点击上传封面图片</span>
                 </div>
-            `).join('');
+                <div id="coverUploading" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;color:#fff;font-size:13px;">上传中…</div>
+              </div>
+              <input type="file" id="coverFileInput" accept="image/*" style="display:none" onchange="uploadCoverFile(this)">
+              <input type="hidden" id="editCover">
+              <div style="display:flex;gap:8px;margin-top:6px;align-items:center;">
+                <span id="coverFileName" style="font-size:11px;color:var(--t3);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">未选择图片</span>
+                <button class="btn btn-ghost" onclick="clearCover()" style="font-size:11px;padding:4px 10px;">清除</button>
+              </div>
+            </div>
+            <div class="sb-card">
+              <div class="sb-card-title">使用说明</div>
+              <p style="font-size:12px;color:var(--t3);line-height:1.8;">
+                图片：工具栏 → 图片图标<br>
+                B站视频：工具栏 → 视频 → 输入BV号<br>
+                YouTube：输入视频ID<br>
+                MP4直链：粘贴完整URL<br>
+                数据存于本地浏览器
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS VIEW -->
+      <div id="settingsView">
+        <div class="topbar">
+          <div class="topbar-title">站点设置</div>
+          <div class="topbar-actions">
+            <button class="btn btn-primary" onclick="saveSettings()">保存设置</button>
+          </div>
+        </div>
+        <div class="settings-wrap">
+          <div class="settings-card">
+            <h3>基本信息</h3>
+            <div class="settings-row"><label>眉标题（导航栏 & header 左上小字）</label><input type="text" class="settings-input" id="setSiteName" placeholder="百倍机会攻略"></div>
+            <div class="settings-row"><label>主标题（header 大标题）</label><input type="text" class="settings-input" id="setSiteSlogan" placeholder="发现值得你认真对待的机会"></div>
+            <div class="settings-row"><label>日更计数文案（{n} 代表篇数）</label><input type="text" class="settings-input" id="setSiteCountTpl" placeholder="已持续日更 {n} 天"></div>
+            <div class="settings-row"><label>二维码说明文字</label><input type="text" class="settings-input" id="setSiteQrLabel" placeholder="扫码关注公众号"></div>
+            <div class="settings-row">
+              <label>公众号二维码图片</label>
+              <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+                <div id="qrPreview" style="width:72px;height:72px;border:1px solid var(--bd);border-radius:6px;overflow:hidden;background:var(--sf2);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;" onclick="document.getElementById('qrFileInput').click()">
+                  <span style="font-size:22px;">🖼</span>
+                </div>
+                <div style="flex:1;">
+                  <button class="btn btn-ghost" style="width:100%;margin-bottom:6px;" onclick="document.getElementById('qrFileInput').click()">上传二维码图片</button>
+                  <div id="qrFileName" style="font-size:11px;color:var(--t3);">未上传</div>
+                </div>
+              </div>
+              <input type="file" id="qrFileInput" accept="image/*" style="display:none" onchange="uploadQrImage(this)">
+              <input type="hidden" id="setQrUrl">
+            </div>
+          </div>
+          <div class="settings-card">
+            <h3>修改后台密码</h3>
+            <div class="settings-row"><label>当前密码</label><input type="password" class="settings-input" id="setPwdOld" placeholder="当前密码"></div>
+            <div class="settings-row"><label>新密码</label><input type="password" class="settings-input" id="setPwdNew" placeholder="新密码（至少6位）"></div>
+            <div class="settings-row"><label>确认新密码</label><input type="password" class="settings-input" id="setPwdConfirm" placeholder="再次输入新密码"></div>
+            <button class="btn btn-ghost" onclick="changePassword()" style="margin-top:4px">更新密码</button>
+          </div>
+          <div class="settings-card">
+            <h3>页脚文字</h3>
+            <div class="settings-row"><label>页脚版权文字</label><input type="text" class="settings-input" id="setSiteFooter" placeholder="© 2024 百倍机会攻略 · 每天一篇，持续更新"></div>
+          </div>
+          <div class="settings-card danger-card">
+            <h3>数据备份</h3>
+            <p style="font-size:13px;color:var(--t2);margin-bottom:16px;line-height:1.6">导出所有文章数据为 JSON 文件，可用于备份或迁移。</p>
+            <button class="btn btn-ghost" onclick="exportData()" style="margin-right:10px">导出 JSON</button>
+            <button class="btn btn-danger" onclick="confirmImport()">导入 JSON</button>
+            <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+var AUTH_KEY    = 'baibei_admin_auth';
+var DEFAULT_PWD = 'czf330881812';
+var SUPABASE_URL = 'https://pmazexeasryqogyfjhbi.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_JJVVoK8dMkmjAIaklWx4dA_FOTP_7hV';
+
+function sbFetch(path, opts) {
+  return fetch(SUPABASE_URL + '/rest/v1/' + path, Object.assign({
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation'
+    }
+  }, opts || {}));
+}
+
+var editingId = null;
+var articles  = [];
+var tags      = [];
+var settings  = {};
+
+/* ── AUTH ── */
+document.getElementById('pwdInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+
+function enterAdmin() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminApp').style.display = 'block';
+  sessionStorage.setItem('baibei_authed', '1');
+  adminInit();
+}
+
+function doLogin() {
+  var val = document.getElementById('pwdInput').value;
+  sbFetch('settings?key=eq.adminPwd&select=value')
+    .then(function(r) { return r.json(); })
+    .then(function(rows) {
+      var cloudPwd = (rows && rows[0]) ? rows[0].value : null;
+      var stored = cloudPwd || localStorage.getItem(AUTH_KEY) || DEFAULT_PWD;
+      if (cloudPwd) localStorage.setItem(AUTH_KEY, cloudPwd);
+      if (val === stored) {
+        enterAdmin();
+      } else {
+        document.getElementById('loginErr').textContent = '密码错误，请重试';
+        document.getElementById('pwdInput').value = '';
+        document.getElementById('pwdInput').focus();
+        setTimeout(function(){ document.getElementById('loginErr').textContent = ''; }, 2500);
+      }
+    })
+    .catch(function() {
+      var stored = localStorage.getItem(AUTH_KEY) || DEFAULT_PWD;
+      if (val === stored) {
+        enterAdmin();
+      } else {
+        document.getElementById('loginErr').textContent = '密码错误，请重试';
+        document.getElementById('pwdInput').value = '';
+        document.getElementById('pwdInput').focus();
+        setTimeout(function(){ document.getElementById('loginErr').textContent = ''; }, 2500);
+      }
+    });
+}
+
+function doLogout() {
+  sessionStorage.removeItem('baibei_authed');
+  location.reload();
+}
+
+// 刷新免登录：session 内已登录则直接进入
+(function(){
+  if (sessionStorage.getItem('baibei_authed') === '1') {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminApp').style.display = 'block';
+    // adminInit 会在 DOMContentLoaded 后由正常流程调用，这里直接调用
+    window.addEventListener('DOMContentLoaded', function(){ adminInit(); });
+  }
+})();
+
+/* ── INIT ── */
+function adminInit() {
+  showLoadingState();
+  Promise.all([
+    sbFetch('articles?select=*&order=date.desc,id.desc').then(function(r){ return r.json(); }),
+    sbFetch('settings?select=*').then(function(r){ return r.json(); })
+  ]).then(function(results) {
+    var arts = results[0];
+    var sets = results[1];
+    articles = Array.isArray(arts) ? arts : [];
+    settings = {};
+    if (Array.isArray(sets)) {
+      sets.forEach(function(row){ settings[row.key] = row.value; });
+    }
+    switchView('list');
+    fillSettings();
+  }).catch(function(e) {
+    toast('加载数据失败，请检查网络','err');
+  });
+}
+
+function showLoadingState() {
+  var el = document.getElementById('articleTable');
+  if (el) el.innerHTML = '<div class="empty-table"><p>正在加载…</p></div>';
+  switchView('list');
+}
+
+/* Supabase 替代 localStorage — 异步操作由各调用方处理 */
+
+/* ── VIEWS ── */
+function switchView(v) {
+  var views = ['list','editor','settings'];
+  for (var i = 0; i < views.length; i++) {
+    var vEl = document.getElementById(views[i]+'View');
+    if (vEl) vEl.classList.remove('vactive');
+    var ni = document.getElementById('nav' + views[i].charAt(0).toUpperCase() + views[i].slice(1));
+    if (ni) ni.classList.remove('active');
+  }
+  var target = document.getElementById(v+'View');
+  if (target) target.classList.add('vactive');
+  var active = document.getElementById('nav' + v.charAt(0).toUpperCase() + v.slice(1));
+  if (active) active.classList.add('active');
+  if (v === 'list') renderList();
+}
+
+/* ── LIST ── */
+function renderList() {
+  var sorted = articles.slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
+  document.getElementById('statTotal').textContent = articles.length;
+  var now = new Date(); now.setDate(1); now.setHours(0,0,0,0);
+  document.getElementById('statMonth').textContent = articles.filter(function(a){ return new Date(a.date) >= now; }).length;
+  document.getElementById('statLast').textContent = sorted.length ? fmtDate(sorted[0].date) : '—';
+
+  var el = document.getElementById('articleTable');
+  if (!sorted.length) {
+    el.innerHTML = '<div class="empty-table"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>还没有文章，点击"新建文章"开始创作</p></div>';
+    return;
+  }
+  el.innerHTML = sorted.map(function(a) {
+    var tagHtml = (a.tags||[]).slice(0,2).map(function(t){ return '<span class="tag-pill">'+esc(t)+'</span>'; }).join(' ');
+    var coverHtml = a.cover
+      ? '<div class="trow-cover"><img src="'+esc(a.cover)+'" loading="lazy" alt=""></div>'
+      : '<div class="trow-cover"><div class="trow-cover-ph">🖼</div></div>';
+    return '<div class="trow">' +
+      coverHtml +
+      '<div><div class="trow-title">'+esc(a.title||'（无标题）')+'</div><div class="trow-summary">'+esc(a.summary||'')+'</div></div>' +
+      '<div class="trow-date">'+fmtDate(a.date)+'</div>' +
+      '<div>'+tagHtml+'</div>' +
+      '<div class="row-actions">' +
+        '<button class="icon-btn" title="编辑" onclick="editArticle(\''+a.id+'\');event.stopPropagation()">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' +
+        '</button>' +
+        '<button class="icon-btn del" title="删除" onclick="deleteArticle(\''+a.id+'\');event.stopPropagation()">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>' +
+        '</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+/* ── EDITOR ── */
+function newArticle() {
+  editingId = null; tags = ['原创'];
+  document.getElementById('editorTitle').textContent = '新建文章';
+  document.getElementById('editTitle').value = '';
+  document.getElementById('editDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('editSummary').value = '';
+  document.getElementById('editCover').value = '';
+  document.getElementById('richEditor').innerHTML = '';
+  renderTagChips();
+  updateCoverPrev();
+  switchView('editor');
+}
+
+function editArticle(id) {
+  var art = null;
+  for (var i = 0; i < articles.length; i++) { if (String(articles[i].id) === String(id)) { art = articles[i]; break; } }
+  if (!art) return;
+  editingId = id; tags = (art.tags||[]).slice();
+  document.getElementById('editorTitle').textContent = '编辑文章';
+  document.getElementById('editTitle').value = art.title || '';
+  document.getElementById('editDate').value = art.date || new Date().toISOString().slice(0,10);
+  document.getElementById('editSummary').value = art.summary || '';
+  document.getElementById('editCover').value = art.cover || '';
+  document.getElementById('richEditor').innerHTML = art.content || '';
+  renderTagChips();
+  updateCoverPrev();
+  switchView('editor');
+}
+
+function cancelEdit() { switchView('list'); }
+
+function saveArticle() {
+  var title   = document.getElementById('editTitle').value.trim();
+  var date    = document.getElementById('editDate').value;
+  var summary = document.getElementById('editSummary').value.trim();
+  var cover   = document.getElementById('editCover').value.trim();
+  var body    = document.getElementById('richEditor').innerHTML;
+  if (!title) { toast('请填写文章标题','err'); return; }
+  if (!date)  { toast('请选择发布日期','err'); return; }
+
+  // 确保"原创"标签如果存在则排在第一位
+  var sortedTags = tags.slice();
+  var origIdx = sortedTags.indexOf('原创');
+  if (origIdx > 0) { sortedTags.splice(origIdx, 1); sortedTags.unshift('原创'); }
+  var payload = { title:title, date:date, summary:summary, cover:cover, tags:sortedTags, content:body };
+
+  if (editingId !== null) {
+    sbFetch('articles?id=eq.' + String(editingId), {
+      method: 'PATCH',
+      body: JSON.stringify(payload)
+    }).then(function(r) {
+      if (!r.ok) throw new Error('保存失败');
+      return r.json();
+    }).then(function(rows) {
+      if (rows && rows[0]) {
+        for (var i = 0; i < articles.length; i++) {
+          if (String(articles[i].id) === String(editingId)) { articles[i] = rows[0]; break; }
         }
+      }
+      toast('文章已更新','ok');
+      switchView('list');
+    }).catch(function(){ toast('更新失败，请重试','err'); });
+  } else {
+    sbFetch('articles', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }).then(function(r) {
+      if (!r.ok) throw new Error('发布失败');
+      return r.json();
+    }).then(function(rows) {
+      if (rows && rows[0]) articles.unshift(rows[0]);
+      toast('文章已发布','ok');
+      switchView('list');
+    }).catch(function(){ toast('发布失败，请重试','err'); });
+  }
+}
 
-        // 打开新建文章模态框
-        function openAddModal() {
-            editingId = null;
-            document.getElementById('modalTitle').textContent = '新建文章';
-            document.getElementById('articleId').value = '';
-            document.getElementById('articleTitle').value = '';
-            document.getElementById('articleTags').value = '';
-            document.getElementById('articleDate').valueAsDate = new Date();
-            document.getElementById('articleContent').value = '';
-            document.getElementById('articleModal').classList.add('active');
+function deleteArticle(id) {
+  var art = null;
+  for (var i = 0; i < articles.length; i++) { if (String(articles[i].id) === String(id)) { art = articles[i]; break; } }
+  showModal('确认删除', '确定要删除《' + (art ? art.title : '这篇文章') + '》吗？此操作不可撤销。', '删除', 'btn-danger', function() {
+    sbFetch('articles?id=eq.' + id, { method: 'DELETE' })
+      .then(function(r) {
+        if (!r.ok) throw new Error();
+        articles = articles.filter(function(a){ return String(a.id) !== String(id); });
+        renderList();
+        toast('已删除','inf');
+      }).catch(function(){ toast('删除失败，请重试','err'); });
+  });
+}
+
+/* ── TAGS ── */
+function handleTagInput(e) {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    var val = e.target.value.trim().replace(/,/g,'');
+    if (val && tags.indexOf(val) === -1) { tags.push(val); renderTagChips(); }
+    e.target.value = '';
+  }
+  if (e.key === 'Backspace' && !e.target.value && tags.length) { tags.pop(); renderTagChips(); }
+}
+function renderTagChips() {
+  var wrap = document.getElementById('tagsWrap');
+  var inp  = document.getElementById('tagInput');
+  wrap.innerHTML = '';
+  tags.forEach(function(t, i) {
+    var chip = document.createElement('span');
+    chip.className = 'tag-chip';
+    chip.innerHTML = esc(t) + '<button onclick="removeTag(' + i + ')">×</button>';
+    wrap.appendChild(chip);
+  });
+  wrap.appendChild(inp);
+}
+function removeTag(i) { tags.splice(i,1); renderTagChips(); }
+
+/* ── COVER ── */
+function updateCoverPrev(url) {
+  var prev = document.getElementById('coverPrev');
+  var ph   = document.getElementById('coverPh');
+  var ex   = prev.querySelector('img');
+  if (ex) ex.remove();
+  if (url) {
+    var img = document.createElement('img'); img.src = url;
+    prev.appendChild(img); ph.style.display = 'none';
+  } else {
+    ph.style.display = '';
+  }
+}
+
+function uploadQrImage(input) {
+  var file = input.files[0];
+  if (!file) return;
+  if (file.size > 3 * 1024 * 1024) { toast('图片不能超过 3MB','err'); return; }
+  var ext = file.name.split('.').pop().toLowerCase();
+  var fileName = 'qr_' + Date.now() + '.' + ext;
+  document.getElementById('qrFileName').textContent = '上传中…';
+  fetch(SUPABASE_URL + '/storage/v1/object/covers/' + fileName, {
+    method: 'POST',
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': file.type, 'x-upsert': 'true' },
+    body: file
+  }).then(function(r) {
+    if (!r.ok) throw new Error(r.status);
+    var url = SUPABASE_URL + '/storage/v1/object/public/covers/' + fileName;
+    document.getElementById('setQrUrl').value = url;
+    document.getElementById('qrPreview').innerHTML = '<img src="'+url+'" style="width:100%;height:100%;object-fit:cover;">';
+    document.getElementById('qrFileName').textContent = file.name;
+    toast('二维码上传成功','ok');
+  }).catch(function() {
+    document.getElementById('qrFileName').textContent = '上传失败，请重试';
+    toast('上传失败','err');
+  });
+}
+
+function uploadCoverFile(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var maxMB = 5;
+  if (file.size > maxMB * 1024 * 1024) { toast('图片不能超过 5MB','err'); return; }
+
+  // 显示上传中
+  var uploading = document.getElementById('coverUploading');
+  uploading.style.display = 'flex';
+
+  var ext = file.name.split('.').pop().toLowerCase();
+  var fileName = 'cover_' + Date.now() + '.' + ext;
+
+  fetch(SUPABASE_URL + '/storage/v1/object/covers/' + fileName, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': file.type,
+      'x-upsert': 'true'
+    },
+    body: file
+  })
+  .then(function(r) {
+    return r.text().then(function(body) {
+      if (!r.ok) {
+        uploading.style.display = 'none';
+        toast('上传失败：' + r.status + ' ' + body.slice(0,80), 'err');
+        console.error('Storage error', r.status, body);
+        return;
+      }
+      var publicUrl = SUPABASE_URL + '/storage/v1/object/public/covers/' + fileName;
+      document.getElementById('editCover').value = publicUrl;
+      document.getElementById('coverFileName').textContent = file.name;
+      updateCoverPrev(publicUrl);
+      uploading.style.display = 'none';
+      toast('封面上传成功','ok');
+    });
+  })
+  .catch(function(err) {
+    uploading.style.display = 'none';
+    toast('上传失败：' + (err.message||'网络错误'), 'err');
+    console.error('Upload catch:', err);
+  });
+}
+
+function clearCover() {
+  document.getElementById('editCover').value = '';
+  document.getElementById('coverFileName').textContent = '未选择图片';
+  document.getElementById('coverFileInput').value = '';
+  updateCoverPrev('');
+}
+
+/* ── TOOLBAR ── */
+function clearFormat() {
+  // 清除所选文字的所有内联格式，恢复为默认段落样式
+  document.getElementById('richEditor').focus();
+  document.execCommand('removeFormat');
+  // 把选中的块级元素（h2/h3/blockquote）换回 p
+  var sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0) return;
+  var range = sel.getRangeAt(0);
+  var ancestor = range.commonAncestorContainer;
+  if (ancestor.nodeType === 3) ancestor = ancestor.parentNode;
+  // 找到编辑器内所有被选中的块级元素
+  var editor = document.getElementById('richEditor');
+  var blocks = editor.querySelectorAll('h2, h3, h4, blockquote');
+  blocks.forEach(function(el) {
+    if (sel.containsNode(el, true)) {
+      var p = document.createElement('p');
+      p.innerHTML = el.innerHTML;
+      el.parentNode.replaceChild(p, el);
+    }
+  });
+}
+
+function fmt(cmd) {
+  var editor = document.getElementById('richEditor');
+  editor.focus();
+  if (cmd === 'h2' || cmd === 'h3') { document.execCommand('formatBlock', false, cmd); }
+  else if (cmd === 'blockquote')    { document.execCommand('formatBlock', false, 'blockquote'); }
+  else                               { document.execCommand(cmd, false, null); }
+}
+function insertLink() {
+  showInputModal('插入链接', '请输入链接 URL：', 'https://', function(url) {
+    if (!url) return;
+    document.getElementById('richEditor').focus();
+    document.execCommand('insertHTML', false, '<a href="' + esc(url) + '" target="_blank">' + esc(url) + '</a>');
+  });
+}
+function insertImage() {
+  // 弹出选择：上传图片 or 输入URL
+  var overlay = document.createElement('div');
+  overlay.className = 'modal-ov';
+  overlay.innerHTML =
+    '<div class="modal">' +
+    '<h3>插入图片</h3>' +
+    '<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">' +
+      '<button class="btn btn-primary" onclick="triggerBodyImgUpload()" style="width:100%;">📁 从本地上传图片</button>' +
+      '<div style="text-align:center;font-size:12px;color:var(--t3);">— 或者 —</div>' +
+      '<input id="bodyImgUrlInput" class="fi" placeholder="粘贴图片 URL…" style="margin:0">' +
+    '</div>' +
+    '<div class="modal-acts">' +
+      '<button class="btn btn-ghost" onclick="this.closest(\'.modal-ov\').remove()">取消</button>' +
+      '<button class="btn btn-primary" onclick="insertImageByUrl()">插入链接</button>' +
+    '</div>' +
+    '<input type="file" id="bodyImgFileInput" accept="image/*" style="display:none" onchange="uploadBodyImage(this)">' +
+    '</div>';
+  document.body.appendChild(overlay);
+}
+
+function triggerBodyImgUpload() {
+  document.getElementById('bodyImgFileInput').click();
+}
+
+function uploadBodyImage(input) {
+  var file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { toast('图片不能超过 5MB','err'); return; }
+
+  var overlay = input.closest('.modal-ov');
+  var btn = overlay.querySelector('.btn-primary');
+  btn.textContent = '上传中…'; btn.disabled = true;
+
+  var ext = file.name.split('.').pop().toLowerCase();
+  var fileName = 'body_' + Date.now() + '.' + ext;
+
+  fetch(SUPABASE_URL + '/storage/v1/object/covers/' + fileName, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': file.type,
+      'x-upsert': 'true'
+    },
+    body: file
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error('failed');
+    var url = SUPABASE_URL + '/storage/v1/object/public/covers/' + fileName;
+    overlay.remove();
+    var editor = document.getElementById('richEditor');
+    editor.focus();
+    document.execCommand('insertHTML', false,
+      '<img src="' + url + '" alt="" style="max-width:100%;border-radius:6px;margin:16px 0;display:block;">');
+    toast('图片插入成功','ok');
+  })
+  .catch(function() {
+    btn.textContent = '📁 从本地上传图片'; btn.disabled = false;
+    toast('上传失败，请重试','err');
+  });
+}
+
+function insertImageByUrl() {
+  var url = document.getElementById('bodyImgUrlInput').value.trim();
+  if (!url) { toast('请输入图片 URL','err'); return; }
+  var overlay = document.getElementById('bodyImgUrlInput').closest('.modal-ov');
+  overlay.remove();
+  var editor = document.getElementById('richEditor');
+  editor.focus();
+  document.execCommand('insertHTML', false,
+    '<img src="' + esc(url) + '" alt="" style="max-width:100%;border-radius:6px;margin:16px 0;display:block;">');
+}
+function insertVideo() {
+  var overlay = document.createElement('div');
+  overlay.className = 'modal-ov';
+  overlay.innerHTML =
+    '<div class="modal"><h3>插入视频</h3><p>选择类型，填写信息：</p>' +
+    '<select id="vtypeModal" style="width:100%;padding:9px 12px;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);color:var(--t1);font-family:inherit;font-size:13px;outline:none;margin-bottom:14px">' +
+      '<option value="bilibili">B站视频（BV号）</option>' +
+      '<option value="youtube">YouTube（视频ID）</option>' +
+      '<option value="mp4">直链 MP4 URL</option>' +
+    '</select>' +
+    '<input id="vvalModal" placeholder="在这里输入…">' +
+    '<div class="modal-acts">' +
+      '<button class="btn btn-ghost" onclick="this.closest(\'.modal-ov\').remove()">取消</button>' +
+      '<button class="btn btn-primary" onclick="doInsertVideo()">插入</button>' +
+    '</div></div>';
+  document.body.appendChild(overlay);
+}
+function doInsertVideo() {
+  var type = document.getElementById('vtypeModal').value;
+  var val  = document.getElementById('vvalModal').value.trim();
+  if (!val) return;
+  var html = '';
+  if (type === 'bilibili') {
+    html = '<div style="position:relative;padding-bottom:56.25%;border-radius:8px;overflow:hidden;margin:20px 0;background:#000"><iframe src="https://player.bilibili.com/player.html?bvid=' + val + '&autoplay=0" allowfullscreen loading="lazy" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none"></iframe></div>';
+  } else if (type === 'youtube') {
+    html = '<div style="position:relative;padding-bottom:56.25%;border-radius:8px;overflow:hidden;margin:20px 0;background:#000"><iframe src="https://www.youtube.com/embed/' + val + '" allowfullscreen loading="lazy" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none"></iframe></div>';
+  } else {
+    html = '<video controls style="width:100%;border-radius:8px;margin:16px 0;display:block"><source src="' + esc(val) + '"></video>';
+  }
+  document.getElementById('richEditor').focus();
+  document.execCommand('insertHTML', false, html);
+  var ov = document.querySelector('.modal-ov');
+  if (ov) ov.remove();
+}
+
+/* ── SETTINGS ── */
+function fillSettings() {
+  document.getElementById('setSiteName').value     = settings.siteName     || '百倍机会攻略';
+  document.getElementById('setSiteSlogan').value   = settings.siteSlogan   || '发现值得你认真对待的机会';
+  document.getElementById('setSiteCountTpl').value = settings.siteCountTpl || '已持续日更 {n} 天';
+  document.getElementById('setSiteQrLabel').value  = settings.siteQrLabel  || '扫码关注公众号';
+  document.getElementById('setSiteFooter').value   = settings.siteFooter   || '© 2024 百倍机会攻略 · 每天一篇，持续更新';
+  document.getElementById('setQrUrl').value        = settings.qrUrl        || '';
+  if (settings.qrUrl) {
+    document.getElementById('qrPreview').innerHTML = '<img src="'+settings.qrUrl+'" style="width:100%;height:100%;object-fit:cover;">';
+    document.getElementById('qrFileName').textContent = '已上传';
+  }
+}
+function saveSettings() {
+  settings.siteName     = document.getElementById('setSiteName').value.trim();
+  settings.siteSlogan   = document.getElementById('setSiteSlogan').value.trim();
+  settings.siteCountTpl = document.getElementById('setSiteCountTpl').value.trim();
+  settings.siteQrLabel  = document.getElementById('setSiteQrLabel').value.trim();
+  settings.siteFooter   = document.getElementById('setSiteFooter').value.trim();
+  settings.qrUrl        = document.getElementById('setQrUrl').value.trim();
+
+  var upserts = Object.keys(settings).map(function(k) {
+    return sbFetch('settings?key=eq.' + encodeURIComponent(k), {
+      method: 'DELETE'
+    }).then(function() {
+      return sbFetch('settings', {
+        method: 'POST',
+        body: JSON.stringify({ key: k, value: settings[k] })
+      });
+    });
+  });
+
+  Promise.all(upserts)
+    .then(function(){ toast('设置已保存','ok'); })
+    .catch(function(){ toast('保存失败，请重试','err'); });
+}
+function changePassword() {
+  var old = document.getElementById('setPwdOld').value;
+  var nw  = document.getElementById('setPwdNew').value;
+  var cf  = document.getElementById('setPwdConfirm').value;
+  if (nw.length < 6)  { toast('新密码至少 6 位','err'); return; }
+  if (nw !== cf)      { toast('两次密码不一致','err'); return; }
+  // 从云端取当前密码来验证，确保跨设备一致
+  sbFetch('settings?key=eq.adminPwd&select=value')
+    .then(function(r){ return r.json(); })
+    .then(function(rows){
+      var cur = (rows && rows[0]) ? rows[0].value : DEFAULT_PWD;
+      if (old !== cur) { toast('当前密码错误','err'); return; }
+      // 更新云端密码
+      sbFetch('settings?key=eq.adminPwd', { method: 'DELETE' }).then(function(){
+        return sbFetch('settings', { method: 'POST', body: JSON.stringify({ key: 'adminPwd', value: nw }) });
+      }).then(function(){
+        localStorage.setItem(AUTH_KEY, nw);
+        document.getElementById('setPwdOld').value = '';
+        document.getElementById('setPwdNew').value = '';
+        document.getElementById('setPwdConfirm').value = '';
+        toast('密码已更新，所有设备立即生效','ok');
+      }).catch(function(){ toast('更新失败，请重试','err'); });
+    })
+    .catch(function(){ toast('网络错误，请重试','err'); });
+}
+
+/* ── EXPORT / IMPORT ── */
+function exportData() {
+  var blob = new Blob([JSON.stringify({articles:articles, settings:settings}, null, 2)], {type:'application/json'});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href = url; a.download = 'baibei_backup_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click(); URL.revokeObjectURL(url);
+  toast('已导出数据文件','ok');
+}
+function confirmImport() {
+  showModal('导入数据', '导入会覆盖现有所有文章数据，请确保已备份。', '选择文件', 'btn-primary', function() {
+    document.getElementById('importFile').click();
+  });
+}
+function importData(e) {
+  var file = e.target.files[0]; if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      var data = JSON.parse(ev.target.result);
+      if (!data.articles) { toast('JSON 格式错误','err'); return; }
+      // 先清空再批量插入
+      sbFetch('articles', { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
+        .then(function() {
+          return sbFetch('articles', {
+            method: 'POST',
+            body: JSON.stringify(data.articles.map(function(a) {
+              var r = Object.assign({}, a); delete r.id; return r;
+            }))
+          });
+        }).then(function() {
+          articles = data.articles;
+          if (data.settings) { settings = data.settings; fillSettings(); }
+          renderList(); toast('导入成功','ok');
+        }).catch(function(){ toast('导入失败，请重试','err'); });
+    } catch(ex) { toast('JSON 格式错误，导入失败','err'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+/* ── MODAL ── */
+function showModal(title, body, confirmTxt, confirmCls, onConfirm) {
+  var el = document.createElement('div');
+  el.className = 'modal-ov';
+  el.innerHTML = '<div class="modal"><h3>' + esc(title) + '</h3><p>' + esc(body) + '</p>' +
+    '<div class="modal-acts">' +
+    '<button class="btn btn-ghost" onclick="this.closest(\'.modal-ov\').remove()">取消</button>' +
+    '<button class="btn ' + confirmCls + '" id="mcBtn">' + esc(confirmTxt) + '</button>' +
+    '</div></div>';
+  document.body.appendChild(el);
+  el.querySelector('#mcBtn').addEventListener('click', function() { el.remove(); onConfirm(); });
+}
+function showInputModal(title, label, placeholder, onConfirm) {
+  var el = document.createElement('div');
+  el.className = 'modal-ov';
+  el.innerHTML = '<div class="modal"><h3>' + esc(title) + '</h3><p>' + esc(label) + '</p>' +
+    '<input id="miInput" placeholder="' + esc(placeholder) + '">' +
+    '<div class="modal-acts">' +
+    '<button class="btn btn-ghost" onclick="this.closest(\'.modal-ov\').remove()">取消</button>' +
+    '<button class="btn btn-primary" id="miOk">确定</button>' +
+    '</div></div>';
+  document.body.appendChild(el);
+  var inp = el.querySelector('#miInput'); inp.focus();
+  inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') { el.remove(); onConfirm(inp.value.trim()); } });
+  el.querySelector('#miOk').addEventListener('click', function() { el.remove(); onConfirm(inp.value.trim()); });
+}
+
+/* ── TOAST ── */
+function toast(msg, type) {
+  var el = document.createElement('div');
+  el.className = 'toast ' + (type || 'inf');
+  el.textContent = msg;
+  document.getElementById('toastWrap').appendChild(el);
+  setTimeout(function() { if (el.parentNode) el.remove(); }, 3000);
+}
+
+/* ── HELPERS ── */
+function esc(s) {
+  if (typeof s !== 'string') return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('zh-CN', {year:'numeric', month:'2-digit', day:'2-digit'});
+}
+function autoResize(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
+
+/* Paste guard */
+document.addEventListener('DOMContentLoaded', function() {
+  var editor = document.getElementById('richEditor');
+  if (editor) {
+    editor.addEventListener('paste', function(e) {
+      var items = e.clipboardData && e.clipboardData.items;
+      if (!items) return;
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image/') === 0) {
+          e.preventDefault();
+          toast('请将图片上传至图床后粘贴URL，不支持直接粘贴本地图片','inf');
+          return;
         }
-
-        // 编辑文章
-        function editArticle(id) {
-            const article = articles.find(a => a.id === id);
-            if (!article) return;
-
-            editingId = id;
-            document.getElementById('modalTitle').textContent = '编辑文章';
-            document.getElementById('articleId').value = article.id;
-            document.getElementById('articleTitle').value = article.title;
-            document.getElementById('articleTags').value = article.tags.join(',');
-            document.getElementById('articleDate').value = article.date;
-            document.getElementById('articleContent').value = article.content;
-            document.getElementById('articleModal').classList.add('active');
-        }
-
-        // 保存文章
-        function saveArticle(event) {
-            event.preventDefault();
-            
-            const title = document.getElementById('articleTitle').value;
-            const tags = document.getElementById('articleTags').value.split(',').map(t => t.trim()).filter(t => t);
-            const date = document.getElementById('articleDate').value;
-            const content = document.getElementById('articleContent').value;
-
-            if (editingId) {
-                // 编辑现有文章
-                const index = articles.findIndex(a => a.id === editingId);
-                if (index !== -1) {
-                    articles[index] = {
-                        ...articles[index],
-                        title,
-                        tags: tags.length > 0 ? tags : ['美股投资'],
-                        date,
-                        content,
-                        excerpt: content.substring(0, 100) + '...'
-                    };
-                }
-            } else {
-                // 新建文章
-                const newArticle = {
-                    id: Date.now(),
-                    title,
-                    date,
-                    tags: tags.length > 0 ? tags : ['美股投资'],
-                    excerpt: content.substring(0, 100) + '...',
-                    content
-                };
-                articles.unshift(newArticle);
-            }
-
-            saveArticlesToStorage();
-            renderArticlesList();
-            closeArticleModal();
-            showSuccess('articlesSuccess');
-        }
-
-        // 删除文章
-        function deleteArticle(id) {
-            if (!confirm('确定要删除这篇文章吗？')) return;
-            
-            articles = articles.filter(a => a.id !== id);
-            saveArticlesToStorage();
-            renderArticlesList();
-            showSuccess('articlesSuccess');
-        }
-
-        // 关闭模态框
-        function closeArticleModal() {
-            document.getElementById('articleModal').classList.remove('active');
-        }
-
-        // 显示成功消息
-        function showSuccess(elementId) {
-            const el = document.getElementById(elementId);
-            el.classList.add('show');
-            setTimeout(() => {
-                el.classList.remove('show');
-            }, 3000);
-        }
-
-        // 点击模态框外部关闭
-        window.onclick = function(event) {
-            const modal = document.getElementById('articleModal');
-            if (event.target === modal) {
-                closeArticleModal();
-            }
-        }
-
-        // 页面加载时初始化
-        init();
-    </script>
+      }
+    });
+  }
+});
+</script>
 </body>
 </html>

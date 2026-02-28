@@ -1,548 +1,953 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>百倍机会攻略 - 美股投资</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q6HXYX10NN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Q6HXYX10NN');
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://pmazexeasryqogyfjhbi.supabase.co">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500&display=swap"></noscript>
+<title>百倍机会攻略</title>
+<style>
+:root {
+  --bg:       #F4EFE6;
+  --bg2:      #EBE6DC;
+  --bg3:      #E2DDD3;
+  --line:     #D8D3CA;
+  --line2:    #EAE5DC;
+  --t1:       #1C1917;
+  --t2:       #5A5550;
+  --t3:       #9E9890;
+  --tag-bg:   #E2DDD3;
+  --tag-t:    #6A6560;
+  --serif:    'Noto Serif SC', Georgia, serif;
+  --sans:     'Noto Sans SC', -apple-system, sans-serif;
+  --ease:     cubic-bezier(.4,0,.2,1);
+  --max:      900px;
+  --col:      600px;
+}
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
-            line-height: 1.6;
-            color: #1d1d1f;
-            background: #f5f5f7;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--t1);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+img { display: block; max-width: 100%; }
+button, input { font-family: inherit; }
 
-        .container {
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 60px 20px;
-        }
+nav {
+  position: sticky; top: 0; z-index: 200;
+  height: 56px;
+  background: rgba(244,239,230,0.94);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border-bottom: 1px solid var(--line);
+}
+.nav-inner {
+  max-width: var(--max); margin: 0 auto;
+  padding: 0 32px; height: 100%;
+  display: flex; align-items: center; gap: 16px;
+}
+.brand { text-decoration: none; flex-shrink: 0; }
+.brand-name {
+  font-family: var(--serif); font-weight: 600; font-size: 15px;
+  color: var(--t1); letter-spacing: 0.05em; white-space: nowrap;
+}
+.search-wrap { position: relative; flex: 1; min-width: 0; }
+.search-wrap svg {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  width: 13px; height: 13px; color: var(--t3); pointer-events: none;
+}
+#searchInput {
+  width: 100%; padding: 7px 12px 7px 30px;
+  border: 1px solid var(--line); border-radius: 2px;
+  background: var(--bg2); font-size: 13px; color: var(--t1); outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+#searchInput:focus { border-color: var(--t2); box-shadow: 0 0 0 3px rgba(92,85,80,0.1); }
+#searchInput::placeholder { color: var(--t3); }
 
-        header {
-            text-align: center;
-            margin-bottom: 50px;
-            padding: 60px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 24px;
-            color: white;
-            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
-            position: relative;
-        }
+.page { display: none; }
+.page.active { display: block; animation: pgIn .25s var(--ease) both; }
+@keyframes pgIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
 
-        h1 {
-            font-size: 3.5em;
-            font-weight: 700;
-            margin-bottom: 16px;
-            letter-spacing: -0.02em;
-        }
+.home-outer { max-width: var(--max); margin: 0 auto; padding: 0 32px 80px; }
 
-        .subtitle {
-            font-size: 1.3em;
-            font-weight: 400;
-            opacity: 0.95;
-            margin-bottom: 8px;
-        }
+.home-header {
+  padding: 36px 0 20px;
+  border-bottom: 1.5px solid var(--t1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.header-left { flex: 1; min-width: 0; }
+.header-eyebrow {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--t3); margin-bottom: 10px;
+}
+.header-title {
+  font-family: var(--serif);
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 600; line-height: 1.2;
+  color: var(--t1); letter-spacing: -0.01em;
+}
+#resultCount {
+  margin-top: 10px;
+  font-size: 11px; color: var(--t3); letter-spacing: 0.04em;
+}
+.header-qr {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding-bottom: 14px;
+}
+.header-qr-img {
+  width: 80px; height: 80px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg3);
+  border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.header-qr-img img { width: 100%; height: 100%; object-fit: cover; }
+.header-qr-img svg { width: 32px; height: 32px; color: var(--t3); }
+.header-qr-label {
+  font-size: 10px; color: var(--t3);
+  letter-spacing: 0.02em; text-align: center;
+  white-space: nowrap; line-height: 1.4;
+}
 
-        .author {
-            font-size: 0.95em;
-            opacity: 0.85;
-            font-weight: 300;
-        }
+/* ═══ AI投研入口 ═══════════════════════════════════ */
+.ai-entry {
+  display: block;
+  margin: 28px 0 0;
+  padding: 28px 28px 24px;
+  background: linear-gradient(160deg, #3D2E1E 0%, #2E2018 50%, #3A2C1C 100%);
+  border-radius: 3px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+  transition: opacity .25s var(--ease);
+  border: 1px solid rgba(160,120,60,0.2);
+  box-shadow: inset 0 1px 0 rgba(190,150,70,0.12), 0 2px 12px rgba(0,0,0,0.08);
+}
+.ai-entry::before {
+  content: 'AI';
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%) skewX(-8deg);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 220px;
+  font-weight: 900;
+  font-style: italic;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(190,155,75,0.16);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -6px;
+  z-index: 0;
+}
+.ai-entry::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 15%; right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(185,148,70,0.5), rgba(205,168,85,0.75), rgba(185,148,70,0.5), transparent);
+}
+.ai-entry:hover { opacity: 0.87; }
+.ai-entry-title {
+  font-family: var(--serif);
+  font-size: 20px; font-weight: 600;
+  background: linear-gradient(135deg, #C4A052 0%, #DDB96A 45%, #B89048 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.3;
+  margin-bottom: 8px;
+  position: relative; z-index: 1;
+}
+.ai-entry-desc {
+  font-size: 12px;
+  color: rgba(210,185,140,0.5);
+  line-height: 1.8;
+  margin-bottom: 20px;
+  position: relative; z-index: 1;
+}
+.ai-entry-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.08em;
+  color: rgba(185,150,75,0.65);
+  border-bottom: 1px solid rgba(170,135,60,0.22);
+  padding-bottom: 2px;
+  transition: color .2s, border-color .2s;
+  position: relative; z-index: 1;
+}
+.ai-entry:hover .ai-entry-cta {
+  color: rgba(205,168,85,0.88);
+  border-color: rgba(200,160,75,0.45);
+}
+.ai-entry-cta svg { transition: transform .2s var(--ease); }
+.ai-entry:hover .ai-entry-cta svg { transform: translateX(3px); }
 
-        .admin-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-        }
+/* 文章列表分隔线 */
+.list-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 28px 0 0;
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--t3);
+}
+.list-divider::after {
+  content: ''; flex: 1;
+  height: 1px; background: var(--line2);
+}
 
-        .admin-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-        }
+#articleList { margin-top: 0; }
 
-        .search-container {
-            margin-bottom: 40px;
-            position: relative;
-        }
+.article-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line2);
+  cursor: pointer;
+  transition: background .15s;
+  border-radius: 4px;
+}
+.article-row:hover {
+  background: var(--bg2);
+  margin: 0 -12px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.row-thumb {
+  flex-shrink: 0;
+  width: 188px;
+  aspect-ratio: 2.35 / 1;
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--line2);
+}
+.row-thumb img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .5s var(--ease);
+}
+.article-row:hover .row-thumb img { transform: scale(1.04); }
+.row-thumb-inner { width: 100%; height: 100%; }
+.g0 { background: linear-gradient(140deg,#EDE5D8,#D9CEBC); }
+.g1 { background: linear-gradient(140deg,#DDE3E8,#C8D4DC); }
+.g2 { background: linear-gradient(140deg,#DDE8DC,#C8D9C8); }
+.g3 { background: linear-gradient(140deg,#E8DDD8,#D9C8C4); }
+.g4 { background: linear-gradient(140deg,#E8E3D8,#D9D3BC); }
+.row-text { flex: 1; min-width: 0; }
+.row-top-meta {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 7px; flex-wrap: wrap;
+}
+.row-date { font-size: 11px; color: var(--t3); }
+.row-tag {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.02em;
+  background: var(--tag-bg); color: var(--tag-t);
+  border-radius: 3px; padding: 1px 6px;
+}
+.row-title {
+  font-family: var(--serif);
+  font-size: clamp(17px, 1.8vw, 19px);
+  font-weight: 600; line-height: 1.45;
+  color: var(--t1); margin-bottom: 6px;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.row-summary {
+  font-size: 12px; color: var(--t2); line-height: 1.75;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.row-arrow {
+  flex-shrink: 0;
+  color: var(--t3); display: flex; align-items: center;
+  transition: transform .2s var(--ease), color .2s;
+}
+.article-row:hover .row-arrow { transform: translateX(3px); color: var(--t1); }
+.row-arrow svg { width: 13px; height: 13px; }
 
-        .search-box {
-            width: 100%;
-            padding: 18px 24px;
-            padding-left: 50px;
-            border: none;
-            border-radius: 16px;
-            font-size: 1.05em;
-            background: white;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-        }
+.list-state { padding: 60px 0; text-align: center; color: var(--t3); font-size: 13px; }
+.list-state svg { width: 28px; height: 28px; margin: 0 auto 10px; display: block; opacity: .2; }
+.spinner {
+  width: 20px; height: 20px; border: 2px solid var(--line); border-top-color: var(--t2);
+  border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 12px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-        .search-box:focus {
-            outline: none;
-            box-shadow: 0 6px 30px rgba(102, 126, 234, 0.2);
-            transform: translateY(-2px);
-        }
+.pagination {
+  display: flex; align-items: center; justify-content: center;
+  gap: 4px; padding: 32px 0 8px; flex-wrap: wrap;
+}
+.pg-btn {
+  min-width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); border-radius: 5px;
+  background: none; color: var(--t2);
+  font-size: 13px; cursor: pointer; padding: 0 8px;
+  font-family: inherit;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.pg-btn:hover:not(:disabled):not(.active) { background: var(--bg2); color: var(--t1); border-color: var(--t3); }
+.pg-btn.active { background: var(--t1); color: var(--bg); border-color: var(--t1); font-weight: 500; }
+.pg-btn:disabled { opacity: .3; cursor: not-allowed; }
+.pg-ellipsis { min-width: 28px; text-align: center; color: var(--t3); font-size: 13px; }
+.pg-jump { display: flex; align-items: center; gap: 6px; margin-left: 8px; font-size: 12px; color: var(--t3); }
+.pg-jump input {
+  width: 44px; height: 36px; text-align: center;
+  border: 1px solid var(--line); border-radius: 5px;
+  background: var(--bg2); font-size: 13px; color: var(--t1);
+  outline: none; font-family: inherit; transition: border-color .15s;
+}
+.pg-jump input:focus { border-color: var(--t2); }
 
-        .search-icon {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #86868b;
-            font-size: 1.2em;
-        }
+.article-nav {
+  display: flex; gap: 12px;
+  margin-top: 56px; padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+.nav-card {
+  flex: 1; display: flex; flex-direction: column; gap: 6px;
+  padding: 16px 18px; border-radius: 6px;
+  border: 1px solid var(--line2); background: var(--bg2);
+  cursor: pointer; transition: border-color .15s, background .15s;
+  min-width: 0;
+}
+.nav-card:hover { border-color: var(--line); background: var(--bg3); }
+.nav-label { font-size: 11px; color: var(--t3); letter-spacing: 0.04em; flex-shrink: 0; }
+.nav-title {
+  font-family: var(--serif); font-size: 14px; font-weight: 600;
+  color: var(--t1); line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+@media (max-width: 767px) { .article-nav { flex-direction: column; } }
 
-        .article-list {
-            display: grid;
-            gap: 20px;
-        }
+.detail-outer { max-width: var(--col); margin: 0 auto; padding: 0 32px 100px; }
+.back-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin: 0 0 28px;
+  padding: 7px 12px 7px 9px;
+  font-size: 12px; font-weight: 500; color: var(--t2);
+  background: var(--bg2); border: 1px solid var(--line);
+  border-radius: 6px; cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+  letter-spacing: 0.02em;
+  position: sticky; top: 64px; z-index: 100;
+  backdrop-filter: blur(8px);
+  background: rgba(244,239,230,0.92);
+}
+.back-btn:hover { background: var(--bg3); border-color: var(--t3); color: var(--t1); }
+.back-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
 
-        .article-card {
-            background: white;
-            border-radius: 18px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            border: 1px solid rgba(0,0,0,0.04);
-        }
+.detail-cover {
+  width: 100%; aspect-ratio: 2.35 / 1;
+  overflow: hidden; border-radius: 4px;
+  margin-bottom: 36px; background: var(--line2);
+}
+.detail-cover img { width: 100%; height: 100%; object-fit: cover; }
+.detail-eyebrow {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap; margin-bottom: 14px;
+}
+.detail-tag { font-size: 10px; font-weight: 500; background: var(--tag-bg); color: var(--tag-t); border-radius: 3px; padding: 2px 7px; }
+.detail-date, .detail-rt { font-size: 11px; color: var(--t3); }
+.detail-title {
+  font-family: var(--serif);
+  font-size: clamp(22px, 4.5vw, 32px);
+  font-weight: 700; line-height: 1.25;
+  color: var(--t1); letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+.detail-body {
+  font-size: 16px; line-height: 2.0; color: var(--t1);
+  text-rendering: optimizeLegibility;
+}
+.detail-body h2 {
+  font-family: var(--serif); font-size: 19px; font-weight: 600;
+  margin: 44px 0 14px; line-height: 1.4; letter-spacing: -0.01em;
+  padding-top: 4px; border-top: 1px solid var(--line2);
+}
+.detail-body h3 {
+  font-family: var(--serif); font-size: 16px; font-weight: 600;
+  margin: 28px 0 10px; line-height: 1.4;
+}
+.detail-body p { margin-bottom: 24px; }
+.detail-body img { width: 100%; border-radius: 4px; margin: 28px 0; }
+.detail-body figure { margin: 32px 0; }
+.detail-body figcaption { text-align: center; font-size: 12px; color: var(--t3); margin-top: 8px; }
+.detail-body video { width: 100%; border-radius: 4px; margin: 24px 0; background: #000; }
+.detail-body blockquote {
+  border-left: 2px solid var(--t1);
+  padding: 2px 20px; margin: 28px 0;
+  color: var(--t2); font-style: italic; font-size: 15px; line-height: 1.9;
+}
+.detail-body ul, .detail-body ol { padding-left: 22px; margin-bottom: 24px; }
+.detail-body li { margin-bottom: 8px; line-height: 1.8; }
+.detail-body a { color: var(--t1); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line); }
+.detail-body a:hover { text-decoration-color: var(--t1); }
+.detail-body code {
+  background: var(--bg2); border: 1px solid var(--line);
+  border-radius: 3px; padding: 1px 5px;
+  font-size: 13px; font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+.detail-body pre { background: #1C1917; color: #F0EBE0; border-radius: 6px; padding: 18px; overflow-x: auto; margin: 24px 0; }
+.detail-body pre code { background: none; border: none; padding: 0; color: inherit; font-size: 13px; }
 
-        .article-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-            border-color: rgba(102, 126, 234, 0.2);
-        }
+.video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 4px; margin: 24px 0; }
+.video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-        .article-title {
-            font-size: 1.75em;
-            color: #1d1d1f;
-            margin-bottom: 16px;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-        }
+footer {
+  border-top: 1px solid var(--line);
+  padding: 28px 32px;
+  text-align: center;
+  font-size: 11px; color: var(--t3);
+  letter-spacing: 0.05em;
+}
 
-        .article-meta {
-            display: flex;
-            gap: 20px;
-            color: #86868b;
-            font-size: 0.875em;
-            margin-bottom: 20px;
-            font-weight: 400;
-        }
+@media (max-width: 1024px) and (min-width: 768px) {
+  :root { --max: 760px; --col: 680px; }
+  .nav-inner, .home-outer, .detail-outer, footer { padding-left: 24px; padding-right: 24px; }
+  .row-thumb { width: 160px; }
+  .header-qr-img { width: 68px; height: 68px; }
+}
 
-        .article-excerpt {
-            color: #1d1d1f;
-            line-height: 1.7;
-            font-size: 1.05em;
-            opacity: 0.8;
-        }
+@media (max-width: 767px) {
+  .nav-inner { padding: 0 16px; }
+  .home-outer { padding: 0 16px 60px; }
+  .detail-outer { padding: 0 16px 80px; }
+  footer { padding: 20px 16px; }
+  .brand-name { font-size: 14px; }
+  .home-header { flex-direction: row; align-items: center; gap: 16px; padding: 24px 0 16px; }
+  .header-qr { padding-bottom: 0; }
+  .header-qr-img { width: 52px; height: 52px; }
+  .header-qr-label { font-size: 9px; }
+  .header-title { font-size: 18px; }
+  .ai-entry { padding: 22px 20px 20px; }
+  .ai-entry-title { font-size: 18px; }
+  .ai-entry-desc { font-size: 12px; }
+  .article-row { flex-direction: column; align-items: flex-start; gap: 10px; padding: 18px 0; }
+  .article-row:hover { margin: 0 -8px; padding-left: 8px; padding-right: 8px; }
+  .row-thumb { width: 100%; }
+  .row-title { font-size: 16px; }
+  .row-summary { font-size: 12px; }
+  .row-arrow { display: none; }
+  .detail-title { font-size: 20px; }
+  .detail-body { font-size: 15px; line-height: 1.9; }
+  .detail-body h2 { font-size: 17px; margin: 36px 0 12px; }
+  .back-btn { margin: 0 0 24px; }
+}
 
-        .tag {
-            display: inline-block;
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            margin-right: 8px;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-
-        .modal.active {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 60px 20px;
-        }
-
-        .modal-content {
-            background: white;
-            max-width: 800px;
-            width: 100%;
-            border-radius: 20px;
-            padding: 60px;
-            position: relative;
-            margin: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            font-size: 28px;
-            color: #86868b;
-            cursor: pointer;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.2s;
-            background: #f5f5f7;
-        }
-
-        .close-btn:hover {
-            background: #e8e8ed;
-            color: #1d1d1f;
-            transform: scale(1.05);
-        }
-
-        .article-full {
-            line-height: 1.8;
-        }
-
-        .article-full h2 {
-            margin-top: 40px;
-            margin-bottom: 20px;
-            color: #1d1d1f;
-            font-weight: 600;
-            font-size: 1.5em;
-        }
-
-        .article-full p {
-            margin-bottom: 20px;
-            color: #1d1d1f;
-            font-size: 1.05em;
-            opacity: 0.85;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 100px 20px;
-            color: #86868b;
-        }
-
-        .empty-state svg {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 24px;
-            opacity: 0.4;
-            stroke: #86868b;
-        }
-
-        .empty-state h3 {
-            font-size: 1.5em;
-            margin-bottom: 12px;
-            color: #1d1d1f;
-            font-weight: 600;
-        }
-
-        .empty-state p {
-            font-size: 1.05em;
-            opacity: 0.8;
-        }
-
-        .highlight {
-            background: rgba(255, 235, 59, 0.3);
-            padding: 2px 0;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 60px 20px;
-            color: #86868b;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 30px 16px;
-            }
-
-            h1 {
-                font-size: 2.5em;
-            }
-
-            header {
-                padding: 40px 20px;
-                margin-bottom: 40px;
-            }
-
-            .article-card {
-                padding: 30px;
-            }
-
-            .modal-content {
-                padding: 40px 24px;
-            }
-
-            .admin-btn {
-                position: static;
-                margin-top: 20px;
-                display: inline-block;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2em;
-            }
-
-            .subtitle {
-                font-size: 1.1em;
-            }
-
-            .article-title {
-                font-size: 1.4em;
-            }
-        }
-    </style>
+@media (max-width: 400px) {
+  .header-title { font-size: 17px; }
+  .row-title { font-size: 15px; }
+  .detail-title { font-size: 18px; }
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1 id="siteTitle">百倍机会攻略</h1>
-            <p class="subtitle" id="siteSubtitle">美股投资洞察</p>
-            <p class="author" id="siteAuthor">每日深度研究 · 发现价值机会</p>
-            <button class="admin-btn" onclick="window.location.href='admin.html'">管理后台</button>
-        </header>
 
-        <div class="search-container">
-            <span class="search-icon">🔍</span>
-            <input type="text" 
-                   class="search-box" 
-                   id="searchInput" 
-                   placeholder="搜索文章标题、内容或标签..."
-                   oninput="searchArticles()">
-        </div>
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="#" onclick="showHome(); return false;">
+      <span class="brand-name">百倍机会攻略</span>
+    </a>
+    <div class="search-wrap" id="searchWrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input id="searchInput" type="search" placeholder="搜索文章标题或正文……" autocomplete="off">
+    </div>
+  </div>
+</nav>
 
-        <div id="articleList" class="article-list"></div>
-        
-        <div id="emptyState" class="empty-state" style="display: none;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line x1="12" y1="18" x2="12" y2="12"></line>
-                <line x1="9" y1="15" x2="15" y2="15"></line>
-            </svg>
-            <h3>暂无投资洞察</h3>
-            <p>管理员还没有发布文章</p>
-        </div>
+<div class="page active" id="homePage">
+  <div class="home-outer">
 
-        <div id="noResults" class="no-results" style="display: none;">
-            <h3>未找到相关文章</h3>
-            <p>试试其他关键词吧</p>
+    <div class="home-header">
+      <div class="header-left">
+        <div class="header-eyebrow">百倍机会攻略</div>
+        <h1 class="header-title">全球视野下的AI投资机会</h1>
+        <div id="resultCount"></div>
+      </div>
+      <div class="header-qr">
+        <div class="header-qr-img" id="qrHolder">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 3h7v7H3V3zm2 2v3h3V5H5zm8-2h7v7h-7V3zm2 2v3h3V5h-3zM3 14h7v7H3v-7zm2 2v3h3v-3H5zm11-2h2v2h-2v-2zm2 2h2v2h-2v-2zm-2 2h2v2h-2v-2zm2 2h2v2h-2v-2zm-4-4h2v2h-2v-2zm0 4h2v2h-2v-2z"/>
+          </svg>
         </div>
+        <div class="header-qr-label">扫码关注<br>公众号</div>
+      </div>
     </div>
 
-    <!-- 阅读文章模态框 -->
-    <div id="readModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeReadModal()">&times;</span>
-            <div id="articleContent" class="article-full"></div>
-        </div>
+
+    <!-- 文章列表标题 -->
+    <div class="list-divider">最新文章</div>
+
+    <div id="articleList">
+      <div class="list-state">
+        <div class="spinner"></div>
+        正在加载…
+      </div>
     </div>
+    <div id="paginationBar" class="pagination"></div>
+  </div>
+</div>
 
-    <script>
-        let articles = [];
-        let filteredArticles = [];
+<div class="page" id="articleDetailPage">
+  <div class="detail-outer">
+    <button class="back-btn" onclick="showHome()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M5 12l7-7M5 12l7 7"/>
+      </svg>
+      所有文章
+    </button>
+    <div id="articleContent"></div>
+  </div>
+</div>
 
-        // 加载网站设置
-        function loadSiteSettings() {
-            const settings = JSON.parse(localStorage.getItem('siteSettings') || '{}');
-            if (settings.title) document.getElementById('siteTitle').textContent = settings.title;
-            if (settings.subtitle) document.getElementById('siteSubtitle').textContent = settings.subtitle;
-            if (settings.author) document.getElementById('siteAuthor').textContent = settings.author;
+<footer id="siteFooter">© 2026 百倍机会攻略 · 全球投资·押注AI革命</footer>
+
+<script>
+var SUPABASE_URL = 'https://pmazexeasryqogyfjhbi.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_JJVVoK8dMkmjAIaklWx4dA_FOTP_7hV';
+var GS = ['g0','g1','g2','g3','g4'];
+var allArticles = [], filtered = [];
+
+function sbFetch(path, opts) {
+  return fetch(SUPABASE_URL + '/rest/v1/' + path, Object.assign({
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json'
+    }
+  }, opts || {}));
+}
+
+var CACHE_KEY = 'baibei_cache_v2';
+var CACHE_TTL = 30 * 60 * 1000;
+
+function loadCache() {
+  try {
+    var raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    var c = JSON.parse(raw);
+    if (Date.now() - c.ts > CACHE_TTL) return null;
+    return c;
+  } catch(e) { return null; }
+}
+
+function saveCache(arts, sets) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), arts: arts, sets: sets }));
+  } catch(e) {}
+}
+
+function applyData(arts, sets) {
+  allArticles = (Array.isArray(arts) && arts.length > 0) ? arts : DEMO;
+
+  if (Array.isArray(sets)) {
+    var s = {};
+    sets.forEach(function(row){ s[row.key] = row.value; });
+    if (s.siteName) {
+      var ey = document.querySelector('.header-eyebrow');
+      if (ey) ey.textContent = s.siteName;
+      var br = document.querySelector('.brand-name');
+      if (br) br.textContent = s.siteName;
+      document.title = s.siteName;
+    }
+    if (s.siteSlogan) {
+      var ht = document.querySelector('.header-title');
+      if (ht) ht.textContent = s.siteSlogan;
+    }
+    if (s.siteQrLabel) {
+      var ql = document.querySelector('.header-qr-label');
+      if (ql) ql.innerHTML = s.siteQrLabel;
+    }
+    if (s.siteCountTpl) window._countTpl = s.siteCountTpl;
+    if (s.siteFooter) {
+      var ft = document.getElementById('siteFooter');
+      if (ft) ft.textContent = s.siteFooter;
+    }
+    if (s.qrUrl) {
+      var h = document.getElementById('qrHolder');
+      if (h) {
+        h.innerHTML = '';
+        var img = document.createElement('img');
+        img.src = s.qrUrl; img.alt = 'QR';
+        h.appendChild(img);
+      }
+    }
+  }
+
+  filtered = allArticles.slice();
+  renderList(filtered);
+  handleRoute();
+}
+
+function init() {
+  var cache = loadCache();
+  if (cache) {
+    applyData(cache.arts, cache.sets);
+  } else {
+    document.getElementById('articleList').innerHTML =
+      '<div class="list-state"><div class="spinner"></div>正在加载…</div>';
+  }
+
+  Promise.all([
+    sbFetch('articles?select=id,title,summary,cover,tags,date&order=date.desc,id.desc').then(function(r) { return r.json(); }),
+    sbFetch('settings?select=*').then(function(r) { return r.json(); })
+  ]).then(function(results) {
+    var arts = results[0];
+    var sets = results[1];
+    saveCache(arts, sets);
+    var onDetail = document.getElementById('articleDetailPage').classList.contains('active');
+    applyData(arts, sets);
+    if (onDetail) {
+      document.getElementById('articleDetailPage').classList.add('active');
+      document.getElementById('homePage').classList.remove('active');
+    }
+  }).catch(function() {
+    if (!cache) {
+      allArticles = DEMO;
+      filtered = allArticles.slice();
+      renderList(filtered);
+      handleRoute();
+    }
+  });
+}
+
+function calcDays() { return allArticles.length; }
+
+function handleRoute() {
+  var hash = location.hash.replace('#','');
+  if (hash.indexOf('article-') === 0) {
+    var idStr = hash.replace('article-','');
+    for (var i=0; i<allArticles.length; i++) {
+      if (String(allArticles[i].id) === idStr) { showArticle(allArticles[i]); return; }
+    }
+  }
+  showHome();
+}
+window.addEventListener('hashchange', handleRoute);
+window.addEventListener('popstate', function(e) {
+  var state = e.state;
+  if (state && state.page === 'article' && state.id) {
+    for (var i = 0; i < allArticles.length; i++) {
+      if (String(allArticles[i].id) === String(state.id)) {
+        document.getElementById('homePage').classList.remove('active');
+        document.getElementById('articleDetailPage').classList.add('active');
+        document.getElementById('searchWrap').style.display = 'none';
+        showArticle(allArticles[i]);
+        return;
+      }
+    }
+  }
+  document.getElementById('homePage').classList.add('active');
+  document.getElementById('articleDetailPage').classList.remove('active');
+  document.getElementById('searchWrap').style.display = '';
+  document.title = window._siteTitle || '百倍机会攻略';
+  window.scrollTo(0,0);
+});
+
+document.getElementById('searchInput').addEventListener('input', function() {
+  var q = this.value.trim().toLowerCase();
+  filtered = q ? allArticles.filter(function(a) {
+    return a.title.toLowerCase().indexOf(q) !== -1 ||
+      (a.summary||'').toLowerCase().indexOf(q) !== -1 ||
+      (a.content||'').toLowerCase().indexOf(q) !== -1 ||
+      (a.tags||[]).some(function(t){ return t.toLowerCase().indexOf(q)!==-1; });
+  }) : allArticles.slice();
+  renderList(filtered);
+});
+
+var PAGE_SIZE = 10;
+var currentPage = 1;
+var currentList = [];
+
+function renderList(list) { currentList = list; currentPage = 1; renderPage(); }
+function goPage(p) { currentPage = p; renderPage(); window.scrollTo(0, 0); }
+
+function renderPage() {
+  var el = document.getElementById('articleList');
+  var rc = document.getElementById('resultCount');
+  var q = document.getElementById('searchInput').value.trim();
+  if (q) {
+    rc.textContent = '找到 ' + currentList.length + ' 篇相关文章';
+  } else {
+    var tpl = window._countTpl || '原创@百倍，已持续日更 {n} 天';
+    rc.textContent = tpl.replace('{n}', calcDays());
+  }
+
+  if (!currentList.length) {
+    el.innerHTML = '<div class="list-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><p>没有找到相关文章</p></div>';
+    return;
+  }
+
+  var total = Math.ceil(currentList.length / PAGE_SIZE);
+  if (currentPage > total) currentPage = total;
+  if (currentPage < 1) currentPage = 1;
+  var start = (currentPage - 1) * PAGE_SIZE;
+  var pageItems = currentList.slice(start, start + PAGE_SIZE);
+
+  el.innerHTML = pageItems.map(function(a, i) { return rowHTML(a, start + i); }).join('');
+
+  var rows = el.querySelectorAll('.article-row');
+  for (var i = 0; i < rows.length; i++) {
+    (function(row) {
+      var id = row.getAttribute('data-id');
+      row.addEventListener('mouseover', function() { prefetchArticle(id); });
+      row.addEventListener('touchstart', function() { prefetchArticle(id); }, {passive:true});
+      row.addEventListener('click', function() {
+        for (var j = 0; j < allArticles.length; j++) {
+          if (String(allArticles[j].id) === id) { showArticle(allArticles[j]); return; }
         }
+      });
+    })(rows[i]);
+  }
 
-        // 从本地存储加载文章
-        function loadArticles() {
-            const saved = localStorage.getItem('articles');
-            if (saved) {
-                articles = JSON.parse(saved);
-            } else {
-                // 默认示例文章
-                articles = [
-                    {
-                        id: 1,
-                        title: '英伟达财报前瞻：AI革命的下一个里程碑',
-                        date: '2024-02-14',
-                        tags: ['英伟达', 'AI', '财报分析'],
-                        excerpt: 'NVIDIA即将公布Q4财报，市场预期营收将突破200亿美元。从数据中心到汽车芯片，英伟达的AI帝国版图正在快速扩张...',
-                        content: `NVIDIA即将公布Q4财报，市场预期营收将突破200亿美元。从数据中心到汽车芯片，英伟达的AI帝国版图正在快速扩张。
+  var pg = document.getElementById('paginationBar');
+  if (total <= 1) { pg.innerHTML = ''; return; }
 
-作为AI时代最核心的基础设施提供商，英伟达的每次财报都是整个科技行业的风向标。
+  var html = '';
+  html += '<button class="pg-btn" onclick="goPage('+(currentPage-1)+')"'+(currentPage===1?' disabled':'')+'>'+
+    '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>';
 
-本次财报的三大看点：
+  var keys = buildPages(currentPage, total);
+  for (var k = 0; k < keys.length; k++) {
+    if (keys[k] === '...') {
+      html += '<span class="pg-ellipsis">…</span>';
+    } else {
+      html += '<button class="pg-btn'+(keys[k]===currentPage?' active':'')+'" onclick="goPage('+keys[k]+')">'+keys[k]+'</button>';
+    }
+  }
 
-数据中心业务预计将继续保持三位数增长，主要受益于各大科技巨头的AI基础设施投资加速。Meta、微软、谷歌都在大规模采购H100和H200芯片。
+  html += '<button class="pg-btn" onclick="goPage('+(currentPage+1)+')"'+(currentPage===total?' disabled':'')+'>'+
+    '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>';
+  html += '<div class="pg-jump"><span>跳至</span><input type="number" min="1" max="'+total+'" placeholder="—" onkeydown="if(event.key===\'Enter\'){var v=parseInt(this.value,10);if(v>=1&&v<='+total+'){goPage(v);this.value=\'\';}}"></div>';
 
-游戏业务有望回暖，随着新一代RTX 50系列显卡的推出，高端GPU市场需求强劲。
+  pg.innerHTML = html;
+}
 
-汽车芯片业务值得关注，多家车企已经确认将搭载NVIDIA DRIVE平台，这将为公司开辟新的增长曲线。
+function buildPages(cur, total) {
+  var show = {};
+  show[1] = true; show[total] = true;
+  for (var d = -2; d <= 2; d++) {
+    var p = cur + d;
+    if (p >= 1 && p <= total) show[p] = true;
+  }
+  var keys = [];
+  for (var k in show) { keys.push(parseInt(k, 10)); }
+  keys.sort(function(a, b) { return a - b; });
+  var result = [];
+  for (var i = 0; i < keys.length; i++) {
+    if (i > 0 && keys[i] - keys[i-1] > 1) result.push('...');
+    result.push(keys[i]);
+  }
+  return result;
+}
 
-估值角度来看，当前PE虽然看似偏高，但考虑到AI行业的爆发性增长和公司的垄断地位，仍具有长期配置价值。建议投资者关注财报后的回调机会。`
-                    },
-                    {
-                        id: 2,
-                        title: '微软 vs 谷歌：AI搜索大战谁将胜出？',
-                        date: '2024-02-13',
-                        tags: ['微软', '谷歌', 'AI竞争'],
-                        excerpt: '微软借助OpenAI重新定义搜索体验，谷歌则推出Gemini反击。这场AI搜索之战，将重塑未来十年的互联网格局...',
-                        content: `微软借助OpenAI重新定义搜索体验，谷歌则推出Gemini反击。这场AI搜索之战，将重塑未来十年的互联网格局。
+function rowHTML(a, i) {
+  var g = GS[i % GS.length];
+  var thumb = a.cover
+    ? '<div class="row-thumb"><img src="'+esc(a.cover)+'" alt="'+esc(a.title)+'" loading="lazy"></div>'
+    : '<div class="row-thumb"><div class="row-thumb-inner '+g+'"></div></div>';
+  var tags = (a.tags||[]).slice(0,2).map(function(t){
+    return '<span class="row-tag">'+esc(t)+'</span>';
+  }).join('');
+  return '<div class="article-row" data-id="'+esc(String(a.id))+'">'+
+    thumb+
+    '<div class="row-text">'+
+      '<div class="row-top-meta">'+
+        '<span class="row-date">'+fmtDate(a.date)+'</span>'+tags+
+      '</div>'+
+      '<div class="row-title">'+esc(a.title)+'</div>'+
+      '<div class="row-summary">'+esc(a.summary||'')+'</div>'+
+    '</div>'+
+    '<span class="row-arrow">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'+
+        '<path d="M5 12h14M12 5l7 7-7 7"/>'+
+      '</svg>'+
+    '</span>'+
+  '</div>';
+}
 
-微软的战略布局：
+function showHome() {
+  document.getElementById('homePage').classList.add('active');
+  document.getElementById('articleDetailPage').classList.remove('active');
+  document.getElementById('searchWrap').style.display = '';
+  try { history.pushState({page:'home'},document.title,'#'); } catch(e) {}
+  window.scrollTo(0,0);
+  document.title = '百倍机会攻略';
+}
 
-通过130亿美元投资OpenAI，微软获得了GPT技术的独家授权。Bing Chat的推出让微软在搜索市场首次有了挑战谷歌的机会。更重要的是，Office 365全家桶的AI化将带来新的订阅增长点。
+var prefetchTimer = null;
+function prefetchArticle(id) {
+  for (var i = 0; i < allArticles.length; i++) {
+    if (String(allArticles[i].id) === String(id)) {
+      if (allArticles[i].content) return;
+      var art = allArticles[i];
+      art._fetching = true;
+      sbFetch('articles?select=content&id=eq.' + String(id))
+        .then(function(r){ return r.json(); })
+        .then(function(rows){
+          if (rows && rows[0]) art.content = rows[0].content || '';
+          art._fetching = false;
+        })
+        .catch(function(){ art._fetching = false; });
+      return;
+    }
+  }
+}
 
-谷歌的防守反击：
+function showArticle(art) {
+  document.getElementById('homePage').classList.remove('active');
+  document.getElementById('articleDetailPage').classList.add('active');
+  document.getElementById('searchWrap').style.display = 'none';
 
-Gemini的多模态能力理论上超越GPT-4，但产品化速度慢于微软。不过谷歌拥有YouTube、Gmail等海量数据优势，长期AI竞争力不容小觑。搜索广告业务虽然受到冲击，但短期内仍是现金牛。
+  try { history.pushState({page:'article',id:String(art.id)},art.title,'#article-'+art.id); } catch(e) {}
+  document.title = art.title + ' — ' + (window._siteTitle || '百倍机会攻略');
 
-投资建议：
+  if (art.content) { renderArticleDetail(art); return; }
 
-从风险收益比来看，微软当前估值更具吸引力。云计算+AI双轮驱动的增长模式更加确定，而谷歌面临搜索业务被颠覆的风险。建议超配微软，标配谷歌。`
-                    }
-                ];
-                localStorage.setItem('articles', JSON.stringify(articles));
-            }
-            filteredArticles = [...articles];
-            renderArticles();
+  if (art._fetching) {
+    document.getElementById('articleContent').innerHTML =
+      '<div class="list-state"><div class="spinner"></div>正在加载…</div>';
+    var waited = 0;
+    var poll = setInterval(function() {
+      waited += 50;
+      if (art.content) { clearInterval(poll); renderArticleDetail(art); return; }
+      if (waited >= 800) { clearInterval(poll); renderArticleDetail(art); }
+    }, 50);
+    return;
+  }
+
+  document.getElementById('articleContent').innerHTML =
+    '<div class="list-state"><div class="spinner"></div>正在加载…</div>';
+  sbFetch('articles?select=content&id=eq.' + String(art.id))
+    .then(function(r){ return r.json(); })
+    .then(function(rows){
+      if (rows && rows[0]) art.content = rows[0].content || '';
+      renderArticleDetail(art);
+    })
+    .catch(function(){ renderArticleDetail(art); });
+}
+
+function renderArticleDetail(art) {
+  var tags = (art.tags||[]).map(function(t){
+    return '<span class="detail-tag">'+esc(t)+'</span>';
+  }).join('');
+  var rt = readTime(art.content);
+  var coverHTML = art.cover
+    ? '<div class="detail-cover"><img src="'+esc(art.cover)+'" alt="'+esc(art.title)+'"></div>'
+    : '';
+
+  var idx = -1;
+  for (var i = 0; i < allArticles.length; i++) {
+    if (String(allArticles[i].id) === String(art.id)) { idx = i; break; }
+  }
+  var prevArt = idx < allArticles.length - 1 ? allArticles[idx + 1] : null;
+  var nextArt = idx > 0 ? allArticles[idx - 1] : null;
+
+  var navHTML = '<div class="article-nav">';
+  if (prevArt && nextArt) {
+    navHTML += '<div class="nav-card nav-prev" data-navid="'+esc(String(prevArt.id))+'"><span class="nav-label">← 上一篇</span><span class="nav-title">'+esc(prevArt.title)+'</span></div>';
+    navHTML += '<div class="nav-card nav-next" data-navid="'+esc(String(nextArt.id))+'"><span class="nav-label">下一篇 →</span><span class="nav-title">'+esc(nextArt.title)+'</span></div>';
+  } else if (prevArt) {
+    navHTML += '<div class="nav-card nav-prev" data-navid="'+esc(String(prevArt.id))+'"><span class="nav-label">← 上一篇</span><span class="nav-title">'+esc(prevArt.title)+'</span></div>';
+    navHTML += '<div class="nav-empty"></div>';
+  } else if (nextArt) {
+    navHTML += '<div class="nav-empty"></div>';
+    navHTML += '<div class="nav-card nav-next" data-navid="'+esc(String(nextArt.id))+'"><span class="nav-label">下一篇 →</span><span class="nav-title">'+esc(nextArt.title)+'</span></div>';
+  }
+  navHTML += '</div>';
+
+  document.getElementById('articleContent').innerHTML =
+    coverHTML+
+    '<div class="detail-eyebrow">'+tags+'<span class="detail-date">'+fmtDate(art.date)+'</span><span class="detail-rt">约 '+rt+' 分钟阅读</span></div>'+
+    '<h1 class="detail-title">'+esc(art.title)+'</h1>'+
+    '<div class="detail-body">'+renderContent(art.content||'')+'</div>'+
+    navHTML;
+
+  var navCards = document.getElementById('articleContent').querySelectorAll('.nav-prev, .nav-next');
+  for (var k = 0; k < navCards.length; k++) {
+    (function(card) {
+      card.addEventListener('click', function() {
+        var nid = card.getAttribute('data-navid');
+        for (var j = 0; j < allArticles.length; j++) {
+          if (String(allArticles[j].id) === nid) { showArticle(allArticles[j]); return; }
         }
+      });
+    })(navCards[k]);
+  }
 
-        // 搜索文章
-        function searchArticles() {
-            const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
-            
-            if (!keyword) {
-                filteredArticles = [...articles];
-                renderArticles();
-                return;
-            }
+  try { history.pushState({page:'article',id:String(art.id)},art.title,'#article-'+art.id); } catch(e) {}
+  window.scrollTo(0, 0);
+  document.title = art.title + ' — ' + (window._siteTitle || '百倍机会攻略');
+}
 
-            filteredArticles = articles.filter(article => {
-                const titleMatch = article.title.toLowerCase().includes(keyword);
-                const contentMatch = article.content.toLowerCase().includes(keyword);
-                const tagsMatch = article.tags.some(tag => tag.toLowerCase().includes(keyword));
-                return titleMatch || contentMatch || tagsMatch;
-            });
+function renderContent(html) {
+  html = html.replace(/\[youtube:([^\]]+)\]/g, function(_,id) {
+    return '<div class="video-embed"><iframe src="https://www.youtube.com/embed/'+id+'" allowfullscreen loading="lazy"></iframe></div>';
+  });
+  html = html.replace(/\[bilibili:([^\]]+)\]/g, function(_,bv) {
+    return '<div class="video-embed"><iframe src="https://player.bilibili.com/player.html?bvid='+bv+'&autoplay=0" allowfullscreen loading="lazy"></iframe></div>';
+  });
+  return html;
+}
 
-            renderArticles(keyword);
-        }
+function esc(s) {
+  if (typeof s !== 'string') return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtDate(d) {
+  if (!d) return '';
+  return new Date(d).toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric'});
+}
+function readTime(html) {
+  if (!html) return 1;
+  return Math.max(1, Math.round(html.replace(/<[^>]+>/g,'').length/400));
+}
 
-        // 高亮关键词
-        function highlightKeyword(text, keyword) {
-            if (!keyword) return text;
-            const regex = new RegExp(`(${keyword})`, 'gi');
-            return text.replace(regex, '<span class="highlight">$1</span>');
-        }
+var DEMO = [
+  { id:1, title:'2024年最值得关注的10个百倍机会赛道', summary:'从AI基础设施、生物科技到新能源材料，深度拆解当前市场中最具爆发潜力的投资主线，以及如何提前布局。', date:'2024-12-15', tags:['宏观视野','机会扫描'], cover:'', content:'<h2>前言</h2><p>在每一个时代的转折点，总有一批先行者看到了别人还未看清的机会。</p>' },
+  { id:2, title:'AI编程工具完全攻略：如何用 Cursor 实现 10 倍生产力', summary:'从零开始的 Cursor 使用手册，覆盖 Prompt 技巧、项目管理、团队协作，以及真实的效率提升案例。', date:'2024-12-08', tags:['工具攻略','AI效率'], cover:'', content:'<h2>为什么是 Cursor</h2><p>在所有AI编程工具中，Cursor是目前对专业开发者最友好的一款。</p>' }
+];
 
-        // 渲染文章列表
-        function renderArticles(keyword = '') {
-            const listEl = document.getElementById('articleList');
-            const emptyEl = document.getElementById('emptyState');
-            const noResultsEl = document.getElementById('noResults');
-            
-            if (articles.length === 0) {
-                listEl.innerHTML = '';
-                emptyEl.style.display = 'block';
-                noResultsEl.style.display = 'none';
-                return;
-            }
+init();
 
-            if (filteredArticles.length === 0) {
-                listEl.innerHTML = '';
-                emptyEl.style.display = 'none';
-                noResultsEl.style.display = 'block';
-                return;
-            }
-            
-            emptyEl.style.display = 'none';
-            noResultsEl.style.display = 'none';
-            
-            listEl.innerHTML = filteredArticles.map(article => {
-                const title = keyword ? highlightKeyword(article.title, keyword) : article.title;
-                const excerpt = keyword ? highlightKeyword(article.excerpt, keyword) : article.excerpt;
-                const tags = article.tags.map(tag => {
-                    const highlightedTag = keyword ? highlightKeyword(tag, keyword) : tag;
-                    return `<span class="tag">${highlightedTag}</span>`;
-                }).join('');
-                
-                return `
-                    <div class="article-card" onclick="openArticle(${article.id})">
-                        <h2 class="article-title">${title}</h2>
-                        <div class="article-meta">
-                            <span>📅 ${article.date}</span>
-                            <span>📝 ${article.content.length} 字</span>
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            ${tags}
-                        </div>
-                        <p class="article-excerpt">${excerpt}</p>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // 打开文章阅读
-        function openArticle(id) {
-            const article = articles.find(a => a.id === id);
-            if (!article) return;
-            
-            const contentEl = document.getElementById('articleContent');
-            contentEl.innerHTML = `
-                <h1 style="margin-bottom: 20px;">${article.title}</h1>
-                <div class="article-meta" style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee;">
-                    <span>📅 ${article.date}</span>
-                    <span>📝 ${article.content.length} 字</span>
-                </div>
-                <div style="margin-bottom: 20px;">
-                    ${article.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                </div>
-                <div>${article.content.split('\n').map(p => p.trim() ? `<p>${p}</p>` : '<br>').join('')}</div>
-            `;
-            
-            document.getElementById('readModal').classList.add('active');
-        }
-
-        function closeReadModal() {
-            document.getElementById('readModal').classList.remove('active');
-        }
-
-        // 点击模态框外部关闭
-        window.onclick = function(event) {
-            const readModal = document.getElementById('readModal');
-            if (event.target === readModal) {
-                closeReadModal();
-            }
-        }
-
-        // 页面加载时初始化
-        loadSiteSettings();
-        loadArticles();
-    </script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
+}
+</script>
 </body>
 </html>
